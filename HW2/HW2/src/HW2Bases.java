@@ -35,8 +35,7 @@ public class HW2Bases
 {
 	
 	public static void main(String[] args) {
-		//System.out.println((5 << 8) + (3 << 4) + 4);
-		strxtoi("0xFEDCBA");
+		itostrb(0xFEED);
     }
 	
 	/**
@@ -149,6 +148,20 @@ public class HW2Bases
 	public static String itostrb(int binary)
 	{
 		String result = "";
+		//System.out.println(binary);
+		
+		do {
+			if ((binary & 0x1) == 1) {
+				result = "1" + result;
+			} else {
+				result = "0" + result;
+			}
+			
+			binary >>= 1;
+			
+			//System.out.println("n = " + binary);
+			//System.out.println("result = " + result);
+		} while (binary > 0);
 		
 		return result;
 	}
@@ -167,6 +180,20 @@ public class HW2Bases
 	public static String itostrx(int hex)
 	{
 		String result = "";
+		//System.out.println(hex);
+		
+		do {
+			if ((hex & 0x1) == 1) {
+				result = "1" + result;
+			} else {
+				result = "0" + result;
+			}
+			
+			hex >>= 1;
+			
+			//System.out.println("n = " + hex);
+			//System.out.println("result = " + result);
+		} while (hex > 0);
 		
 		return result;
 	}

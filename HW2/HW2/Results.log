@@ -21,16 +21,16 @@ strxtoi(  FEDCBA): Expected:   FEDCBA Result:   FEDCBA Correct:  true
 strxtoi(7FFFFFFF): Expected: 7FFFFFFF Result: 7FFFFFFF Correct:  true
 
 Testing itostrb:
-itostrb(       0): Expected:                               0 Result:                            null Correct: false
-itostrb(       E): Expected:                            1110 Result:                            null Correct: false
-itostrb(      2A): Expected:                          101010 Result:                            null Correct: false
-itostrb(7FFFFFFF): Expected: 1111111111111111111111111111111 Result:                            null Correct: false
+itostrb(       0): Expected:                               0 Result:                               0 Correct:  true
+itostrb(       E): Expected:                            1110 Result:                            1110 Correct:  true
+itostrb(      2A): Expected:                          101010 Result:                          101010 Correct:  true
+itostrb(7FFFFFFF): Expected: 1111111111111111111111111111111 Result: 1111111111111111111111111111111 Correct:  true
 
 Testing itostrx:
-itostrx(       0): Expected:        0 Result:     null Correct: false
-itostrx(      10): Expected:       10 Result:     null Correct: false
-itostrx(    FEED): Expected:     FEED Result:     null Correct: false
-itostrx(7FFFFFFF): Expected: 7FFFFFFF Result:     null Correct: false
+itostrx(       0): Expected:        0 Result:          Correct: false
+itostrx(      10): Expected:       10 Result:          Correct: false
+itostrx(    FEED): Expected:     FEED Result:          Correct: false
+itostrx(7FFFFFFF): Expected: 7FFFFFFF Result:          Correct: false
 
 =====================
 Testing HW2Operations
