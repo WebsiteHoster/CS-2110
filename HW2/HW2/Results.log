@@ -10,15 +10,15 @@ strdtoi( 555555555): Expected: 211D1AE3 Result: 211D1AE3 Correct:  true
 
 Testing strbtoi:
 strbtoi(                              0): Expected:        0 Result:        0 Correct:  true
-strbtoi(                           1011): Expected:        B Result:        0 Correct: false
-strbtoi(                        1001000): Expected:       48 Result:        0 Correct: false
-strbtoi(1111111111111111111111111111111): Expected: 7FFFFFFF Result:        0 Correct: false
+strbtoi(                           1011): Expected:        B Result:        B Correct:  true
+strbtoi(                        1001000): Expected:       48 Result:       48 Correct:  true
+strbtoi(1111111111111111111111111111111): Expected: 7FFFFFFF Result: 7FFFFFFF Correct:  true
 
 Testing strxtoi:
 strxtoi(       0): Expected:        0 Result:        0 Correct:  true
-strxtoi(      32): Expected:       32 Result:        0 Correct: false
-strxtoi(  FEDCBA): Expected:   FEDCBA Result:        0 Correct: false
-strxtoi(7FFFFFFF): Expected: 7FFFFFFF Result:        0 Correct: false
+strxtoi(      32): Expected:       32 Result:       32 Correct:  true
+strxtoi(  FEDCBA): Expected:   FEDCBA Result:   FEDCBA Correct:  true
+strxtoi(7FFFFFFF): Expected: 7FFFFFFF Result: 7FFFFFFF Correct:  true
 
 Testing itostrb:
 itostrb(       0): Expected:                               0 Result:                            null Correct: false

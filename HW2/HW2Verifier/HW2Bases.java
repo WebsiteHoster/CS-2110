@@ -35,7 +35,8 @@ public class HW2Bases
 {
 	
 	/*public static void main(String[] args) {
-		strbtoi("1011");
+		//System.out.println((5 << 8) + (3 << 4) + 4);
+		strxtoi("0xFEDCBA");
     }*/
 	
 	/**
@@ -76,17 +77,18 @@ public class HW2Bases
 	 */
 	public static int strbtoi(String binary)
 	{
-		///System.out.println(binary);
+		//System.out.println(binary);
 		
 		int result = 0;
 		
 		for (int i = 0; i < binary.length(); i++) {
-			//System.out.println("Current bit: " + binary.charAt(i));
+			char curr = binary.charAt(i); 
+			//System.out.println("Current bit: " + curr);
 			
-			if (binary.charAt(i) == '1') {
+			if (curr == '1') {
 				result = (result << 1) | 0x1;	//Multiply by 2 then add 1
-			} else if (binary.charAt(i) == '0') {
-				result = result << 1;			//Multiply by 2
+			} else if (curr == '0') {
+				result <<= 1;					//Multiply by 2
 			}
 			
 			//System.out.println("Result: " + result);
@@ -107,7 +109,31 @@ public class HW2Bases
 	 */
 	public static int strxtoi(String hex)
 	{
-		return 0;
+		//System.out.println(hex);
+		
+		int result = 0;
+		int shift = 0;
+		
+		for (int i = hex.length() - 1; i >= 0 ; i--) {
+			char curr = hex.charAt(i);
+			int value = 0;
+			
+			//System.out.println("Current bit: " + curr + ", " + (int)curr);
+			
+			if (curr >= 48 && curr <= 57) {
+				value = curr - 48;
+			} else if (curr >= 65 && curr <= 70) {
+				value = curr - 55;
+			}
+			
+			value <<= shift;
+			result += value;
+			shift += 4;
+			
+			//System.out.println("Result: " + result);
+		}
+		
+		return result;
 	}
 
 	/**
