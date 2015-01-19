@@ -27,10 +27,10 @@ itostrb(      2A): Expected:                          101010 Result:            
 itostrb(7FFFFFFF): Expected: 1111111111111111111111111111111 Result: 1111111111111111111111111111111 Correct:  true
 
 Testing itostrx:
-itostrx(       0): Expected:        0 Result:          Correct: false
-itostrx(      10): Expected:       10 Result:          Correct: false
-itostrx(    FEED): Expected:     FEED Result:          Correct: false
-itostrx(7FFFFFFF): Expected: 7FFFFFFF Result:          Correct: false
+itostrx(       0): Expected:        0 Result:        0 Correct:  true
+itostrx(      10): Expected:       10 Result:       10 Correct:  true
+itostrx(    FEED): Expected:     FEED Result:     FEED Correct:  true
+itostrx(7FFFFFFF): Expected: 7FFFFFFF Result: 7FFFFFFF Correct:  true
 
 =====================
 Testing HW2Operations

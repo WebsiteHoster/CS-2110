@@ -34,10 +34,6 @@
 public class HW2Bases
 {
 	
-	/*public static void main(String[] args) {
-		itostrb(0);
-    }*/
-	
 	/**
 	 * strdtoi - Decimal String to int
 	 *
@@ -52,13 +48,15 @@ public class HW2Bases
 		//System.out.println("Testing " + decimal);
 		int result = 0;
 		int curr = 0;
-		int mult = 1;
+		int mult = 1;									//current multiplier
 		
 		for (int i = decimal.length() - 1; i >= 0; i--) {
-			curr = decimal.charAt(i) - '0';
+			curr = decimal.charAt(i) - '0';				//adjust current bit's ascii value to int value
 			//System.out.println("curr = " + curr);
-			result += curr * mult;
-			mult *= 10;
+			
+			result += curr * mult;						//multiply current bit by multiplier and add to result
+			mult *= 10;									//raise multiplier to next bit
+			
 			//System.out.println(result);
 		}
 		
@@ -111,23 +109,23 @@ public class HW2Bases
 		//System.out.println(hex);
 		
 		int result = 0;
-		int shift = 0;
+		int shift = 0;									//power of 16
 		
 		for (int i = hex.length() - 1; i >= 0 ; i--) {
-			char curr = hex.charAt(i);
-			int value = 0;
+			char curr = hex.charAt(i);					//current bit
+			int value = 0;								//value of current bit
 			
 			//System.out.println("Current bit: " + curr + ", " + (int)curr);
 			
-			if (curr >= 48 && curr <= 57) {
-				value = curr - 48;
-			} else if (curr >= 65 && curr <= 70) {
-				value = curr - 55;
+			if (curr >= 48 && curr <= 57) {				//if curr is 0-9
+				value = curr - 48;						//adjust the int value to its ascii equivalent
+			} else if (curr >= 65 && curr <= 70) {		//if curr is A-F
+				value = curr - 55;						//adjust the int value to its ascii equivalent
 			}
 			
-			value <<= shift;
-			result += value;
-			shift += 4;
+			value <<= shift;							//shift to next bit by multiplying by power of 16
+			result += value;							//add to result
+			shift += 4;									//raise power of 16 by 1
 			
 			//System.out.println("Result: " + result);
 		}
@@ -151,13 +149,13 @@ public class HW2Bases
 		//System.out.println(binary);
 		
 		do {
-			if ((binary & 0x1) == 1) {
-				result = "1" + result;
+			if ((binary & 0x1) == 1) {		//if current bit is odd
+				result = "1" + result;		//append 1
 			} else {
-				result = "0" + result;
+				result = "0" + result;		//otherwise append 0
 			}
 			
-			binary >>= 1;
+			binary >>= 1;					//shift to next bit by dividing by 2
 			
 			//System.out.println("n = " + binary);
 			//System.out.println("result = " + result);
@@ -180,6 +178,22 @@ public class HW2Bases
 	public static String itostrx(int hex)
 	{
 		String result = "";
+		//System.out.println(hex);
+		
+		do {
+			int curr = hex & 0xF;						//current bit divided by 16s
+			
+			if (curr >= 0 && curr <= 9) {				//if curr is 0-9
+				result = (char) (curr + 48) + result;	//adjust the int value to its ascii equivalent and append it to result
+			} else if (curr >= 10 && curr <= 15) {		//if curr A-F
+				result = (char) (curr + 55) + result;	//adjust the int value to its ascii equivalent and append it to result
+			}
+			
+			hex >>= 4;									//shift to next bit by dividing by 16
+			
+			//System.out.println("n = " + hex);
+			//System.out.println("result = " + result);
+		} while (hex > 0);
 		
 		return result;
 	}
