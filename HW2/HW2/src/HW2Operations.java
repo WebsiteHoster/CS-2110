@@ -105,8 +105,12 @@ public class HW2Operations
 	 */
 	public static int setByte(int num, int a_byte, int which)
 	{
-		return 0;
+		return (num & (0xFFFFFFFF & ~(0xFF << (which << 3)))) | (a_byte << (which << 3));
 	}
+	
+	/*public static void main(String[] args) {
+		System.out.println(Integer.toHexString(0xFFFFFFFF & ~(0xFF << 16)));
+	}*/
 	
 	/**
 	 * Get a 4-bit nibble from an int.

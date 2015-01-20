@@ -37,10 +37,10 @@ Testing HW2Operations
 =====================
 
 Testing setByte:
-setByte(   0, 1, 0): Expected:    1 Result:    0 Correct: false
-setByte(33912280, 44, 1): Expected: 33914480 Result:    0 Correct: false
-setByte(12345678, CF, 2): Expected: 12CF5678 Result:    0 Correct: false
-setByte(56EFCAFE, BE, 3): Expected: BEEFCAFE Result:    0 Correct: false
+setByte(   0, 1, 0): Expected:    1 Result:    1 Correct:  true
+setByte(33912280, 44, 1): Expected: 33914480 Result: 33914480 Correct:  true
+setByte(12345678, CF, 2): Expected: 12CF5678 Result: 12CF5678 Correct:  true
+setByte(56EFCAFE, BE, 3): Expected: BEEFCAFE Result: BEEFCAFE Correct:  true
 
 Testing getNibble:
 getNibble(10100292, 1): Expected:    9 Result:    0 Correct: false
