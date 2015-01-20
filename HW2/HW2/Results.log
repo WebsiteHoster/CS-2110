@@ -80,52 +80,52 @@ Testing HW2BitVector
 ====================
 
 Testing set:
-set( 0): Bits:        0 Expected:        1 Result:        0 Correct: false
-set( 1): Bits:        1 Expected:        3 Result:        1 Correct: false
-set( 2): Bits:        3 Expected:        7 Result:        3 Correct: false
-set( 3): Bits:        7 Expected:        F Result:        7 Correct: false
-set( 4): Bits:        F Expected:       1F Result:        F Correct: false
-set( 5): Bits:       1F Expected:       3F Result:       1F Correct: false
-set( 6): Bits:       3F Expected:       7F Result:       3F Correct: false
-set( 7): Bits:       7F Expected:       FF Result:       7F Correct: false
-set( 8): Bits:       FF Expected:      1FF Result:       FF Correct: false
-set( 9): Bits:      1FF Expected:      3FF Result:      1FF Correct: false
-set(10): Bits:      3FF Expected:      7FF Result:      3FF Correct: false
-set(11): Bits:      7FF Expected:      FFF Result:      7FF Correct: false
-set(12): Bits:      FFF Expected:     1FFF Result:      FFF Correct: false
-set(13): Bits:     1FFF Expected:     3FFF Result:     1FFF Correct: false
-set(14): Bits:     3FFF Expected:     7FFF Result:     3FFF Correct: false
-set(15): Bits:     7FFF Expected:     FFFF Result:     7FFF Correct: false
-set(16): Bits:     FFFF Expected:    1FFFF Result:     FFFF Correct: false
-set(17): Bits:    1FFFF Expected:    3FFFF Result:    1FFFF Correct: false
-set(18): Bits:    3FFFF Expected:    7FFFF Result:    3FFFF Correct: false
-set(19): Bits:    7FFFF Expected:    FFFFF Result:    7FFFF Correct: false
-set(20): Bits:    FFFFF Expected:   1FFFFF Result:    FFFFF Correct: false
-set(21): Bits:   1FFFFF Expected:   3FFFFF Result:   1FFFFF Correct: false
-set(22): Bits:   3FFFFF Expected:   7FFFFF Result:   3FFFFF Correct: false
-set(23): Bits:   7FFFFF Expected:   FFFFFF Result:   7FFFFF Correct: false
-set(24): Bits:   FFFFFF Expected:  1FFFFFF Result:   FFFFFF Correct: false
-set(25): Bits:  1FFFFFF Expected:  3FFFFFF Result:  1FFFFFF Correct: false
-set(26): Bits:  3FFFFFF Expected:  7FFFFFF Result:  3FFFFFF Correct: false
-set(27): Bits:  7FFFFFF Expected:  FFFFFFF Result:  7FFFFFF Correct: false
-set(28): Bits:  FFFFFFF Expected: 1FFFFFFF Result:  FFFFFFF Correct: false
-set(29): Bits: 1FFFFFFF Expected: 3FFFFFFF Result: 1FFFFFFF Correct: false
-set(30): Bits: 3FFFFFFF Expected: 7FFFFFFF Result: 3FFFFFFF Correct: false
-set(31): Bits: 7FFFFFFF Expected: FFFFFFFF Result: 7FFFFFFF Correct: false
+set( 0): Bits:        0 Expected:        1 Result:        1 Correct:  true
+set( 1): Bits:        1 Expected:        3 Result:        3 Correct:  true
+set( 2): Bits:        3 Expected:        7 Result:        7 Correct:  true
+set( 3): Bits:        7 Expected:        F Result:        F Correct:  true
+set( 4): Bits:        F Expected:       1F Result:       1F Correct:  true
+set( 5): Bits:       1F Expected:       3F Result:       3F Correct:  true
+set( 6): Bits:       3F Expected:       7F Result:       7F Correct:  true
+set( 7): Bits:       7F Expected:       FF Result:       FF Correct:  true
+set( 8): Bits:       FF Expected:      1FF Result:      1FF Correct:  true
+set( 9): Bits:      1FF Expected:      3FF Result:      3FF Correct:  true
+set(10): Bits:      3FF Expected:      7FF Result:      7FF Correct:  true
+set(11): Bits:      7FF Expected:      FFF Result:      FFF Correct:  true
+set(12): Bits:      FFF Expected:     1FFF Result:     1FFF Correct:  true
+set(13): Bits:     1FFF Expected:     3FFF Result:     3FFF Correct:  true
+set(14): Bits:     3FFF Expected:     7FFF Result:     7FFF Correct:  true
+set(15): Bits:     7FFF Expected:     FFFF Result:     FFFF Correct:  true
+set(16): Bits:     FFFF Expected:    1FFFF Result:    1FFFF Correct:  true
+set(17): Bits:    1FFFF Expected:    3FFFF Result:    3FFFF Correct:  true
+set(18): Bits:    3FFFF Expected:    7FFFF Result:    7FFFF Correct:  true
+set(19): Bits:    7FFFF Expected:    FFFFF Result:    FFFFF Correct:  true
+set(20): Bits:    FFFFF Expected:   1FFFFF Result:   1FFFFF Correct:  true
+set(21): Bits:   1FFFFF Expected:   3FFFFF Result:   3FFFFF Correct:  true
+set(22): Bits:   3FFFFF Expected:   7FFFFF Result:   7FFFFF Correct:  true
+set(23): Bits:   7FFFFF Expected:   FFFFFF Result:   FFFFFF Correct:  true
+set(24): Bits:   FFFFFF Expected:  1FFFFFF Result:  1FFFFFF Correct:  true
+set(25): Bits:  1FFFFFF Expected:  3FFFFFF Result:  3FFFFFF Correct:  true
+set(26): Bits:  3FFFFFF Expected:  7FFFFFF Result:  7FFFFFF Correct:  true
+set(27): Bits:  7FFFFFF Expected:  FFFFFFF Result:  FFFFFFF Correct:  true
+set(28): Bits:  FFFFFFF Expected: 1FFFFFFF Result: 1FFFFFFF Correct:  true
+set(29): Bits: 1FFFFFFF Expected: 3FFFFFFF Result: 3FFFFFFF Correct:  true
+set(30): Bits: 3FFFFFFF Expected: 7FFFFFFF Result: 7FFFFFFF Correct:  true
+set(31): Bits: 7FFFFFFF Expected: FFFFFFFF Result: FFFFFFFF Correct:  true
 
 Testing clear:
-clear(19): Bits: FFFFFFFF Expected: FFF7FFFF Result: FFFFFFFF Correct: false
-clear(21): Bits: FFF7FFFF Expected: FFD7FFFF Result: FFF7FFFF Correct: false
+clear(19): Bits: FFFFFFFF Expected: FFF7FFFF Result: FFF7FFFF Correct:  true
+clear(21): Bits: FFF7FFFF Expected: FFD7FFFF Result: FFD7FFFF Correct:  true
 
 Testing toggle:
-toggle( 0): Bits: FFFFFFFF Expected: FFFFFFFE Result: FFFFFFFF Correct: false
-toggle( 0): Bits: FFFFFFFE Expected: FFFFFFFF Result: FFFFFFFE Correct: false
-toggle(12): Bits: ABCDEFFF Expected: ABCDFFFF Result: ABCDEFFF Correct: false
-toggle(30): Bits: ABCDEFFF Expected: EBCDEFFF Result: ABCDEFFF Correct: false
+toggle( 0): Bits: FFFFFFFF Expected: FFFFFFFE Result: FFFFFFFE Correct:  true
+toggle( 0): Bits: FFFFFFFE Expected: FFFFFFFF Result: FFFFFFFF Correct:  true
+toggle(12): Bits: ABCDEFFF Expected: ABCDFFFF Result: ABCDFFFF Correct:  true
+toggle(30): Bits: ABCDEFFF Expected: EBCDEFFF Result: EBCDEFFF Correct:  true
 
 Testing isSet:
-isSet(20): Bits:   100000 Expected:  true Result: false Correct: false
-isSet( 0): Bits: 55555555 Expected:  true Result: false Correct: false
+isSet(20): Bits:   100000 Expected:  true Result:  true Correct:  true
+isSet( 0): Bits: 55555555 Expected:  true Result:  true Correct:  true
 isSet(31): Bits: 753A96CB Expected: false Result: false Correct:  true
 isSet(32): Bits: FFFFFFFF Expected: false Result: false Correct:  true
 

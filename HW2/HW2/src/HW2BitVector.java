@@ -44,7 +44,7 @@ public class HW2BitVector
 	 */
 	public void set(int index)
 	{
-		
+		bits |= (0x1 << index);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class HW2BitVector
 	 */
 	public void clear(int index)
 	{
-		
+		bits &= ~(0x1 << index);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class HW2BitVector
 	 */
 	public void toggle(int index)
 	{
-		
+		bits ^= 0x1 << index;
 	}
 	
 	/**
@@ -79,7 +79,12 @@ public class HW2BitVector
 	 */
 	public boolean isSet(int index)
 	{
-		return false;
+		return (index >= 32) ? false : (bits & (0x1 << index)) != 0;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(Integer.toHexString(0xFFFFFFFF));
+		System.out.println(Integer.toHexString(0x1 << 31) + "\n");
 	}
 	
 	/**
