@@ -127,12 +127,12 @@ public class HW2BitVector
 	{
 		int count = 0;
 		
-		for (int i = 0; i < 32; i++) {
-			if ((bits & 0x1) == 1) {
-				count++;
+		for (int i = 0; i < 32; i++) {	//iterate through every bit
+			if ((bits & 0x1) == 1) {	//bits AND 0x1 will be 1  if least significant bit is 1
+				count++;				//increment count
 			}
 			
-			bits >>= 1;
+			bits >>= 1;					//shift bits to next bit
 		}
 		
 		return count;
@@ -146,12 +146,12 @@ public class HW2BitVector
 	{
 		int count = 0;
 		
-		for (int i = 0; i < 32; i++) {
-			if ((bits & 0x1) == 0) {
-				count++;
+		for (int i = 0; i < 32; i++) {	//iterate through every bit
+			if ((bits & 0x1) == 0) {	//bits AND 0x1 will be 0 if least significant bit is 0
+				count++;				//increment count
 			}
 			
-			bits >>= 1;
+			bits >>= 1;					//shift bits to next bit
 		}
 		
 		return count;
@@ -165,20 +165,15 @@ public class HW2BitVector
 	public int size()
 	{
 		int size = 0;
-		int mask = 0x10000000;
-		System.out.println("bits = " + bits);
 		
-		/*do {
-			System.out.println(bits);
-			size++;
-			bits >>= 1;
-		} while ((bits | 0x0) > 0);*/
-		
-		for (int i = 32; i >= 0; i--, mask >>= 1) {
-			if ((bits & mask) != 0) {
-				size++;
-			}
+		if (bits < 0) {					//check for negative/edge case numbers
+			return 32;					//negative numbers will always have max bits
 		}
+		
+		do {
+			size++;						//increment size
+			bits >>= 1;					//shift bits to next bit
+		} while ((bits | 0x0) > 0);		//loop while bits OR 0x0 is greater than 0
 		
 		return size;
 	}

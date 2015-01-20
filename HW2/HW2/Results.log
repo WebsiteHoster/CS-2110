@@ -155,7 +155,7 @@ zerosCount(): Bits: 5555FFFF Expected:  8 Result:  8 Correct:  true
 zerosCount(): Bits: 87654321 Expected: 19 Result: 19 Correct:  true
 
 Testing size:
-size(): Bits: FFFFFFF0 Expected: 32 Result: 25 Correct: false
-size(): Bits: 1F4CAB04 Expected: 29 Result: 14 Correct: false
-size(): Bits:        0 Expected:  1 Result:  0 Correct: false
-size(): Bits:     7569 Expected: 15 Result:  9 Correct: false
+size(): Bits: FFFFFFF0 Expected: 32 Result: 32 Correct:  true
+size(): Bits: 1F4CAB04 Expected: 29 Result: 29 Correct:  true
+size(): Bits:        0 Expected:  1 Result:  1 Correct:  true
+size(): Bits:     7569 Expected: 15 Result: 15 Correct:  true
