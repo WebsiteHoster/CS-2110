@@ -43,10 +43,10 @@ setByte(12345678, CF, 2): Expected: 12CF5678 Result: 12CF5678 Correct:  true
 setByte(56EFCAFE, BE, 3): Expected: BEEFCAFE Result: BEEFCAFE Correct:  true
 
 Testing getNibble:
-getNibble(10100292, 1): Expected:    9 Result:    0 Correct: false
-getNibble(DEADBEEF, 5): Expected:    A Result:    0 Correct: false
-getNibble(DEADBEEF, 0): Expected:    F Result:    0 Correct: false
-getNibble(12345678, 7): Expected:    1 Result:    0 Correct: false
+getNibble(10100292, 1): Expected:    9 Result:    9 Correct:  true
+getNibble(DEADBEEF, 5): Expected:    A Result:    A Correct:  true
+getNibble(DEADBEEF, 0): Expected:    F Result:    F Correct:  true
+getNibble(12345678, 7): Expected:    1 Result:    1 Correct:  true
 
 Testing pack:
 pack(12, 34, 56, 78): Expected: 12345678 Result:    0 Correct: false

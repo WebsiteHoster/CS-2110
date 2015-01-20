@@ -105,7 +105,7 @@ public class HW2Operations
 	 */
 	public static int setByte(int num, int a_byte, int which)
 	{
-		return 0;
+		return (num & (0xFFFFFFFF & ~(0xFF << (which << 3)))) | (a_byte << (which << 3));
 	}
 	
 	/**
@@ -133,9 +133,13 @@ public class HW2Operations
 	 */
 	public static int getNibble(int num, int which)
 	{
-		return 0;
+		return num >> (which << 2) & 0xF;
 	}
 
+	/*public static void main(String[] args) {
+		System.out.println(Integer.toHexString(0xFFFFFFFF & ~(0xFF << 16)));
+	}*/
+	
 	/**
 	 * Pack 4 bytes into an int.
 	 * 

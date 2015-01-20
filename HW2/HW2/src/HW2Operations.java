@@ -108,10 +108,6 @@ public class HW2Operations
 		return (num & (0xFFFFFFFF & ~(0xFF << (which << 3)))) | (a_byte << (which << 3));
 	}
 	
-	/*public static void main(String[] args) {
-		System.out.println(Integer.toHexString(0xFFFFFFFF & ~(0xFF << 16)));
-	}*/
-	
 	/**
 	 * Get a 4-bit nibble from an int.
 	 *
@@ -137,9 +133,9 @@ public class HW2Operations
 	 */
 	public static int getNibble(int num, int which)
 	{
-		return 0;
+		return num >> (which << 2) & 0xF;
 	}
-
+	
 	/**
 	 * Pack 4 bytes into an int.
 	 * 
@@ -161,6 +157,10 @@ public class HW2Operations
 	{
 		return 0;
 	}
+	
+	/*public static void main(String[] args) {
+		System.out.println(Integer.toHexString(0xFFFFFFFF & ~(0xFF << 16)));
+	}*/
 	
 	/**
 	 * Take the absolute value of an n-bit number.
