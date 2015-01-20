@@ -49,10 +49,10 @@ getNibble(DEADBEEF, 0): Expected:    F Result:    F Correct:  true
 getNibble(12345678, 7): Expected:    1 Result:    1 Correct:  true
 
 Testing pack:
-pack(12, 34, 56, 78): Expected: 12345678 Result:    0 Correct: false
-pack(BA, 5E, BA, 11): Expected: BA5EBA11 Result:    0 Correct: false
-pack(CA, FE, BA, BE): Expected: CAFEBABE Result:    0 Correct: false
-pack(AA, AA, CC, CC): Expected: AAAACCCC Result:    0 Correct: false
+pack(12, 34, 56, 78): Expected: 12345678 Result: 12345678 Correct:  true
+pack(BA, 5E, BA, 11): Expected: BA5EBA11 Result: BA5EBA11 Correct:  true
+pack(CA, FE, BA, BE): Expected: CAFEBABE Result: CAFEBABE Correct:  true
+pack(AA, AA, CC, CC): Expected: AAAACCCC Result: AAAACCCC Correct:  true
 
 Testing abs:
 abs(    2110, 17): Expected:     2110 Result:        0 Correct: false

@@ -155,12 +155,10 @@ public class HW2Operations
 	 */
 	public static int pack(int b3, int b2, int b1, int b0)
 	{
-		return 0;
+		return (b3 << 24) | (b2 << 16) | (b1 << 8) | b0;
 	}
 	
-	/*public static void main(String[] args) {
-		System.out.println(Integer.toHexString(0xFFFFFFFF & ~(0xFF << 16)));
-	}*/
+	
 	
 	/**
 	 * Take the absolute value of an n-bit number.
@@ -179,6 +177,10 @@ public class HW2Operations
 	{
 		return 0;
 	}
+	
+	/*public static void main(String[] args) {
+		System.out.println(Integer.toHexString(0xFFFFFFFF & ~(0xFF << 16)));
+	}*/
 
 	/**
 	 * NOTE: For this method, you may only use &, |, and ~.
