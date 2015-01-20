@@ -55,10 +55,10 @@ pack(CA, FE, BA, BE): Expected: CAFEBABE Result: CAFEBABE Correct:  true
 pack(AA, AA, CC, CC): Expected: AAAACCCC Result: AAAACCCC Correct:  true
 
 Testing abs:
-abs(    2110, 17): Expected:     2110 Result:        0 Correct: false
-abs(    1236, 13): Expected:      DCA Result:        0 Correct: false
-abs(3FFFFFFF, 31): Expected: 3FFFFFFF Result:        0 Correct: false
-abs(7FFFFFFF, 31): Expected:        1 Result:        0 Correct: false
+abs(    2110, 17): Expected:     2110 Result:     2110 Correct:  true
+abs(    1236, 13): Expected:      DCA Result:      DCA Correct:  true
+abs(3FFFFFFF, 31): Expected: 3FFFFFFF Result: 3FFFFFFF Correct:  true
+abs(7FFFFFFF, 31): Expected:        1 Result:        1 Correct:  true
 
 Testing xor:
 xor(FF00FF00,   FF00FF): Expected: FFFFFFFF Result:        0 Correct: false

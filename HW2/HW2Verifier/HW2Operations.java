@@ -175,11 +175,15 @@ public class HW2Operations
 	 */
 	public static int abs(int num, int n)
 	{
-		return 0;
+		return (0 == (1 << (n - 1) & num) ? num : (num ^ (((1 << (n - 1)) << 1) - 1)) + 1);
 	}
 	
 	/*public static void main(String[] args) {
-		System.out.println(Integer.toHexString(0xFFFFFFFF & ~(0xFF << 16)));
+		int topbit = 1 << (13 - 1);
+		int ones = (topbit << 1) - 1;
+		System.out.println(Integer.toHexString(topbit));
+		System.out.println(Integer.toHexString(ones));
+		System.out.println(Integer.toHexString(0x00001234 & ones));
 	}*/
 
 	/**
