@@ -105,7 +105,7 @@ public class HW2Operations
 	 */
 	public static int setByte(int num, int a_byte, int which)
 	{
-		return (num & (0xFFFFFFFF & ~(0xFF << (which << 3)))) | (a_byte << (which << 3));
+		return (num & ~(0xFF << (which << 3))) | (a_byte << (which << 3));
 	}
 	
 	/**
@@ -175,16 +175,17 @@ public class HW2Operations
 	 */
 	public static int abs(int num, int n)
 	{
+		/*int maxbit = 1 << (n - 1);		//most significant bit
+		int twosComp = (maxbit << 1) - 1;	//2's complement
+		
+		if (0 == (maxbit & num)) {			//if sign bit is 0
+			return num;						//return original number
+		} else {							//else (if sign bit is 1)
+			return (num ^ twosComp) + 1;	//negate and return original number
+		}*/
+		
 		return (0 == (1 << (n - 1) & num) ? num : (num ^ (((1 << (n - 1)) << 1) - 1)) + 1);
 	}
-	
-	/*public static void main(String[] args) {
-		int topbit = 1 << (13 - 1);
-		int ones = (topbit << 1) - 1;
-		System.out.println(Integer.toHexString(topbit));
-		System.out.println(Integer.toHexString(ones));
-		System.out.println(Integer.toHexString(0x00001234 & ones));
-	}*/
 
 	/**
 	 * NOTE: For this method, you may only use &, |, and ~.
@@ -202,9 +203,9 @@ public class HW2Operations
 	 */
 	public static int xor(int num1, int num2)
 	{
-		return 0;
+		return (num1 | num2) & ~(num1 & num2);
 	}
-	
+
 	/**
 	 * Return true if the given number is a power of 2.
 	 * 

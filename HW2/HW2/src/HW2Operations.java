@@ -203,17 +203,9 @@ public class HW2Operations
 	 */
 	public static int xor(int num1, int num2)
 	{
-		return 0;
+		return (num1 | num2) & ~(num1 & num2);
 	}
-	
-	/*public static void main(String[] args) {
-		int topbit = 1 << (13 - 1);
-		int ones = (topbit << 1) - 1;
-		System.out.println(Integer.toHexString(topbit));
-		System.out.println(Integer.toHexString(ones));
-		System.out.println(Integer.toHexString(0x00001234 & ones));
-	}*/
-	
+
 	/**
 	 * Return true if the given number is a power of 2.
 	 * 
