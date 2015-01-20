@@ -104,7 +104,19 @@ public class HW2BitVector
 	 */
 	public String toString()
 	{
-		return null;
+		String result = "";
+		
+		for (int i = 0; i < 32; i++) {
+			if ((bits & 0x1) == 1) {		//if current bit is odd
+				result = "1" + result;		//append 1
+			} else {
+				result = "0" + result;		//otherwise append 0
+			}
+			
+			bits >>= 1;
+		}
+		
+		return result;
 	}
 
 	/**
@@ -113,7 +125,17 @@ public class HW2BitVector
 	 */
 	public int onesCount()
 	{
-		return 0;
+		int count = 0;
+		
+		for (int i = 0; i < 32; i++) {
+			if ((bits & 0x1) == 1) {
+				count++;
+			}
+			
+			bits >>= 1;
+		}
+		
+		return count;
 	}
 	
 	/**
@@ -122,7 +144,17 @@ public class HW2BitVector
 	 */
 	public int zerosCount()
 	{
-		return 0;
+		int count = 0;
+		
+		for (int i = 0; i < 32; i++) {
+			if ((bits & 0x1) == 0) {
+				count++;
+			}
+			
+			bits >>= 1;
+		}
+		
+		return count;
 	}
 	
 	/**
@@ -132,6 +164,22 @@ public class HW2BitVector
 	 */
 	public int size()
 	{
-		return 0;
+		int size = 0;
+		int mask = 0x10000000;
+		System.out.println("bits = " + bits);
+		
+		/*do {
+			System.out.println(bits);
+			size++;
+			bits >>= 1;
+		} while ((bits | 0x0) > 0);*/
+		
+		for (int i = 32; i >= 0; i--, mask >>= 1) {
+			if ((bits & mask) != 0) {
+				size++;
+			}
+		}
+		
+		return size;
 	}
 }

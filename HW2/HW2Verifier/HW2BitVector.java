@@ -44,7 +44,7 @@ public class HW2BitVector
 	 */
 	public void set(int index)
 	{
-		
+		bits |= (0x1 << index);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class HW2BitVector
 	 */
 	public void clear(int index)
 	{
-		
+		bits &= ~(0x1 << index);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class HW2BitVector
 	 */
 	public void toggle(int index)
 	{
-		
+		bits ^= 0x1 << index;
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class HW2BitVector
 	 */
 	public boolean isSet(int index)
 	{
-		return false;
+		return (index < 0 || index >= 32) ? false : (bits & (0x1 << index)) != 0;
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class HW2BitVector
 	 */
 	public boolean isClear(int index)
 	{
-		return false;
+		return (index < 0 || index >= 32) ? true : (bits & (0x1 << index)) == 0;
 	}
 	
 	/**
@@ -104,7 +104,19 @@ public class HW2BitVector
 	 */
 	public String toString()
 	{
-		return null;
+		String result = "";
+		
+		for (int i = 0; i < 32; i++) {
+			if ((bits & 0x1) == 1) {		//if current bit is odd
+				result = "1" + result;		//append 1
+			} else {
+				result = "0" + result;		//otherwise append 0
+			}
+			
+			bits >>= 1;
+		}
+		
+		return result;
 	}
 
 	/**

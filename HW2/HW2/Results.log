@@ -136,26 +136,26 @@ isClear(31): Bits: 753A96CB Expected:  true Result:  true Correct:  true
 isClear(32): Bits: FFFFFFFF Expected:  true Result:  true Correct:  true
 
 Testing toString:
-toString(): Bits:        0 Expected: 00000000000000000000000000000000 Result:                             null Correct: false
-toString(): Bits: DEADBEEF Expected: 11011110101011011011111011101111 Result:                             null Correct: false
-toString(): Bits:     F569 Expected: 00000000000000001111010101101001 Result:                             null Correct: false
-toString(): Bits: FFFFFF0F Expected: 11111111111111111111111100001111 Result:                             null Correct: false
-toString(): Bits: FFAF7FFF Expected: 11111111101011110111111111111111 Result:                             null Correct: false
+toString(): Bits:        0 Expected: 00000000000000000000000000000000 Result: 00000000000000000000000000000000 Correct:  true
+toString(): Bits: DEADBEEF Expected: 11011110101011011011111011101111 Result: 11011110101011011011111011101111 Correct:  true
+toString(): Bits:     F569 Expected: 00000000000000001111010101101001 Result: 00000000000000001111010101101001 Correct:  true
+toString(): Bits: FFFFFF0F Expected: 11111111111111111111111100001111 Result: 11111111111111111111111100001111 Correct:  true
+toString(): Bits: FFAF7FFF Expected: 11111111101011110111111111111111 Result: 11111111101011110111111111111111 Correct:  true
 
 Testing onesCount:
-onesCount(): Bits: FFFFFFFF Expected: 32 Result:  0 Correct: false
+onesCount(): Bits: FFFFFFFF Expected: 32 Result: 32 Correct:  true
 onesCount(): Bits:        0 Expected:  0 Result:  0 Correct:  true
-onesCount(): Bits: 5555FFFF Expected: 24 Result:  0 Correct: false
-onesCount(): Bits: 87654321 Expected: 13 Result:  0 Correct: false
+onesCount(): Bits: 5555FFFF Expected: 24 Result: 24 Correct:  true
+onesCount(): Bits: 87654321 Expected: 13 Result: 13 Correct:  true
 
 Testing zerosCount:
 zerosCount(): Bits: FFFFFFFF Expected:  0 Result:  0 Correct:  true
-zerosCount(): Bits:        0 Expected: 32 Result:  0 Correct: false
-zerosCount(): Bits: 5555FFFF Expected:  8 Result:  0 Correct: false
-zerosCount(): Bits: 87654321 Expected: 19 Result:  0 Correct: false
+zerosCount(): Bits:        0 Expected: 32 Result: 32 Correct:  true
+zerosCount(): Bits: 5555FFFF Expected:  8 Result:  8 Correct:  true
+zerosCount(): Bits: 87654321 Expected: 19 Result: 19 Correct:  true
 
 Testing size:
-size(): Bits: FFFFFFF0 Expected: 32 Result:  0 Correct: false
-size(): Bits: 1F4CAB04 Expected: 29 Result:  0 Correct: false
+size(): Bits: FFFFFFF0 Expected: 32 Result: 25 Correct: false
+size(): Bits: 1F4CAB04 Expected: 29 Result: 14 Correct: false
 size(): Bits:        0 Expected:  1 Result:  0 Correct: false
-size(): Bits:     7569 Expected: 15 Result:  0 Correct: false
+size(): Bits:     7569 Expected: 15 Result:  9 Correct: false
