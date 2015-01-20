@@ -132,8 +132,8 @@ isSet(32): Bits: FFFFFFFF Expected: false Result: false Correct:  true
 Testing isClear:
 isClear(20): Bits:   100000 Expected: false Result: false Correct:  true
 isClear( 0): Bits: 55555555 Expected: false Result: false Correct:  true
-isClear(31): Bits: 753A96CB Expected:  true Result: false Correct: false
-isClear(32): Bits: FFFFFFFF Expected:  true Result: false Correct: false
+isClear(31): Bits: 753A96CB Expected:  true Result:  true Correct:  true
+isClear(32): Bits: FFFFFFFF Expected:  true Result:  true Correct:  true
 
 Testing toString:
 toString(): Bits:        0 Expected: 00000000000000000000000000000000 Result:                             null Correct: false
