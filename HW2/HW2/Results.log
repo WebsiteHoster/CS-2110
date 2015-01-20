@@ -67,11 +67,11 @@ xor(55555555, AAAA8888): Expected: FFFFDDDD Result:        0 Correct: false
 xor(55555555, 33333333): Expected: 66666666 Result:        0 Correct: false
 
 Testing powerOf2:
-powerOf2(10000000): Expected:  true Result: false Correct: false
+powerOf2(10000000): Expected:  true Result:  true Correct:  true
 powerOf2(      A0): Expected: false Result: false Correct:  true
-powerOf2(       8): Expected:  true Result: false Correct: false
+powerOf2(       8): Expected:  true Result:  true Correct:  true
 powerOf2(80000000): Expected: false Result: false Correct:  true
-powerOf2(       1): Expected:  true Result: false Correct: false
+powerOf2(       1): Expected:  true Result:  true Correct:  true
 powerOf2(12345678): Expected: false Result: false Correct:  true
 powerOf2(       0): Expected: false Result: false Correct:  true
 

@@ -214,7 +214,7 @@ public class HW2Operations
 	 */
 	public static boolean powerOf2(int num)
 	{
-		return false;
+		return num > 0 && (num & (num - 1)) == 0;
 	}
 }
 
