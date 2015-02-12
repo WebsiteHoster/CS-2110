@@ -12,19 +12,19 @@ in the Patt Patel book.
 
 .orig x3000
         LD R0, A        | x2006   <- like this
-        LD R1, B        |
-        ADD R2, R1, R0  |
-        NOT R2, R2      |
-        ADD R2, R0, R2  |
-        ADD R2, R2, 1   |
-        HALT            |
+        LD R1, B        | x2206
+        ADD R2, R1, R0  | x1440
+        NOT R2, R2      | x94BF
+        ADD R2, R0, R2  | x1402
+        ADD R2, R2, 1   | x14A1
+        HALT            | xF025
 
         A .fill 45
         B .fill 60
 .end
 
 What is the condition code (CC) at the end of this program?
-
+n
 
 
 ===========================================================================
@@ -35,13 +35,13 @@ Disassemble the following instructions. For instructions that have offsets,
 just write out the number offsets. Don't worry about labels.
 
 x5020	| AND R0, R0, 0
-x5260   |
-x127f	|
-x03fe	|
-x2606	|
-x60c0	|
-x3010	|
-xe002	|
+x5260   | AND R1, R1, 0
+x127f	| ADD R1, R1, -1
+x03fe	| BRp -2
+x2606	| LD R3, 6
+x60c0	| LDR R0, R3, 0
+x3010	| ST R0, 16
+xe002	| LEA R0, 2
 
 
 ===========================================================================
