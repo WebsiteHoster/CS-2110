@@ -12,11 +12,11 @@ in the Patt Patel book.
 
 .orig x3000
         LD R0, A        | x2006   <- like this
-        LD R1, B        | x2206   0010 0010 0000 0110
-        ADD R2, R1, R0  | x1440   0001 0100 0100 0000
-        NOT R2, R2      | x94BF   1001 0100 1011 1111
-        ADD R2, R0, R2  | x1402   0001 0100 0000 0010
-        ADD R2, R2, 1   | x14A1   0001 0100 1010 0001
+        LD R1, B        | x2206
+        ADD R2, R1, R0  | x1440
+        NOT R2, R2      | x94BF
+        ADD R2, R0, R2  | x1402
+        ADD R2, R2, 1   | x14A1
         HALT            | xF025
 
         A .fill 45
@@ -35,7 +35,7 @@ Disassemble the following instructions. For instructions that have offsets,
 just write out the number offsets. Don't worry about labels.
 
 x5020	| AND R0, R0, 0
-x5260 | AND R1, R1, 0
+x5260   | AND R1, R1, 0
 x127f	| ADD R1, R1, -1
 x03fe	| BRp -2
 x2606	| LD R3, 6
