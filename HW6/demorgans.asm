@@ -11,6 +11,7 @@ NOT R0, R0      ;A = !A
 NOT R1, R1      ;B = !B
 AND R2, R0, R1  ;ANSWER = A & B
 NOT R2, R2      ;ANSWER = !ANSWER
+ST R2, ANSWER	;Store answer in ANSWER
 HALT
 	
 A       .fill 6

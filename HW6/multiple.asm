@@ -25,7 +25,8 @@ END     ADD R0, R0, R1  ;Use 2's complement of B for A = A - B
 
         ADD R3, R3, 1   ;Return 1
 
-RETURN  HALT
+RETURN  ST R3, ANSWER   ;Store answer in ANSWER
+        HALT
 
 A       .fill 25
 B       .fill 5
