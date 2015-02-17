@@ -4,7 +4,7 @@
 
 .orig x3000
 
-; CODE GOES HERE! :D
+LEA R0, xFF; CODE GOES HERE! :D
 	
 NUMBER  .fill 9
 ARRAY   .fill x6000
