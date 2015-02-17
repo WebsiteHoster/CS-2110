@@ -4,7 +4,7 @@
 
 .orig x3000
 
-	LD R0, A        ;Load A into R0
+        LD R0, A        ;Load A into R0
         LD R1, B        ;Load B into R1
         LD R2, A        ;Load copy of A into R2
         LD R3, ANSWER   ;Load ANSWER into R3
