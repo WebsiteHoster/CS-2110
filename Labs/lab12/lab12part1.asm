@@ -7,7 +7,7 @@
 		LD R0, A		;Load A in R0
 		LD R1, B		;Load B in R1
 
-		TRAP x30
+		TRAP x30 		;Exectue multiplication
 
 		HALT
 
