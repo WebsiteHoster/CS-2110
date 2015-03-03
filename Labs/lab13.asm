@@ -3,7 +3,7 @@
 	LD R6, STACK
 	LD R0, VAL
 
-	ADD R6, R6, -1
+	ADD R6, R6, -1 	;Make space for arg VAL
 	STR R0, R6, 0	;Store value parameter
 	JSR FIB			;Call FIB here!
 

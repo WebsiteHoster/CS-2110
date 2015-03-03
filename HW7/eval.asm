@@ -33,103 +33,152 @@ SL_END	NOT R2, R0			; |
 STACK	.fill xf000
 ANS		.fill -1
 EVALPTR	.fill EVAL
-STRING	.stringz "1+2+3"	;Originally "1*2+3*4+5"
+STRING	.stringz "1+4*7*6+0*9+4*8*2+2+4+2*7+3*1"
 		.blkw 200
 
-EVAL 	;ADD R6, R6, -1	  	;Leave space for return value
-        ;ADD R6, R6, -1	  	;Allocate space for return address
-        ;STR R7, R6, 0	  	;Store return address on stack
-        ;ADD R6, R6, -1  	;Leave space for old frame pointer
-        ;STR R5, R6, 0   	;Save old frame pointer
-        ;ADD R6, R6, -1  	;Make room for result
-        ;ADD R5, R6, 0   	;Copy SP to FP
-        ;ADD R6, R6, -2  	;Allocate space for saved registers
-        ;STR R0, R6, 0   	;Save R0
-        ;STR R1, R6, 1   	;Save R1
+	 	;Initializing stack operations
+EVAL	ADD R6, R6, -6 	;Make space for RV, RA, old FP, and local vars i, left, and right
+		STR R7, R6, 4	;Store RA onto stack
+		STR R5, R6, 3	;Store old FP onto stack
+		ADD R5, R6, 2	;Point FP at first local variable
 
-        ;Pre-subroutine stack management
-        STR R1, R6, 1 		;Save len
-        STR R0, R6, 0		;Save *str
-        ;Return value goes in (R6 - 1)
-        ;Index i goes in (R6 - 2)
-        STR R7, R6, -3 		;Save return address
-        STR R6, R6, -4		;Save FP
+        ;Begin eval
+        AND R0, R0, 0	;R0 = i = 0
+		STR R0, R5, 0	;Store i on stack
 
-        ;subroutine here. STORE RESULT IN R5
-        AND R2, R2, 0		;R2 = i = 0
+        ;LOOP1 loop condition
+LOOP1	LDR R1, R5, 5	;R1 = len
+		NOT R1, R1		;Two's complement
+		ADD R1, R1, 1
+		ADD R0, R0, R1	;i - len
+		BRzp BREAK1		;Done looping when (I - len) >= 0
 
-        ;PLUS loop condition
-PLUS	;ADD R6, R6, -5		;Push - shift FP up
-		STR R2, R6, -2 		;Store current index i in (R6 - 2)
-		LDR R3, R6, 1		;Get limit len
-		NOT R3, R3			;Two's complement
-		ADD R3, R3, 1
-		ADD R2, R2, R3		;i - len
-		BRzp BREAK1			;Done looping when (I - len) >= 0
+			;LOOP1 loop body
+			LDR R0, R5, 0	;Reload i
+			LDR R1, R5, 5 	;Reload len
+			LDR R2, R5, 4	;R2 = str
 
-			;PLUS loop body
-			LDR R2, R6, -2		;R2 = i
-			LDR R0, R6, 0		;R0 = &str[0]
-			LDR R3, R6, 1 		;R3 = len
-
-			;PLUS if condition
-			ADD R1, R0, R2		;R1 = str + i
-			LDR R1, R1, 0		;R1 = *(str + i)
-			ADD R1, R1, -16		;char - 43 (ASCII value for '+')
-			ADD R1, R1, -16
-			ADD R1, R1, -11
+			;LOOP1 if condition
+			ADD R2, R2, R0		;R2 = str + i
+			LDR R2, R2, 0		;R2 = *(str + i)
+			ADD R2, R2, -16		;char - 43 (ASCII value for '+')
+			ADD R2, R2, -16
+			ADD R2, R2, -11
 			BRnp SKIP1			;Skip if when current char =/= '+'
 
-				;PLUS if body
-				ADD R6, R6, -6		; \ Shift FP for left = eval(str, len)
-				LDR R1, R6, 4		; | Reload old i
-				STR R1, R6, 1 		; | Save new len = i
-				STR R0, R6, 0		; | Save new *str
-				JSR EVAL			; | Recursion
-				LDR R2, R6, -7		; / R2 = left
+				;LOOP1 if body
+				ADD R6, R6, -2 	;Make space for args on stack
+				LDR R2, R5, 4	;Reload str
+				STR R0, R6, 1	;Store arg len = i on stack
+				STR R2, R6, 0	;Store arg *str = str on stack
+				JSR EVAL 		;EVAL(str, i)
+				LDR R3, R6, 0	;Load RV from SP
+				STR R3, R5, -1 	;Store local var left on stack
 
-				ADD R6, R6, -6		; \ Shift FP for right = eval(str + 					  |			i + 1, len - i - 1)
-				LDR R0, R6, 6		; | Reload old *str
-				LDR R1, R6, 4		; | Reload old i
-				ADD R0, R0, R1 		; | R0 = str + i
-				ADD R0, R0, 1 		; | R0 = str + i + 1
-				STR R0, R6, 0		; | Save new *str = str + i + 1
-									; |
-				LDR R3, R6, 7		; | Reload old len
-				NOT R1, R1			; | Two's complement i
-				ADD R1, R1, 1 		; |
-				ADD R3, R3, R1 		; | R3 = len - i
-				ADD R3, R3, -1 		; | R3 = len - i - 1
-				STR R3, R6, 1		; | Save new len = len - i -1
-				JSR EVAL			; |
-				LDR R3, R6, -7		; / R3 = right
+				ADD R6, R6, 3	;Destroy previous recurse and point SP to top of stack
+				LDR R0, R5, 0	;Reload i
+				LDR R1, R5, 5 	;Reload len
+				LDR R2, R5, 4	;R2 = str
 
-				ADD R1, R2, R3		;R1 = left + right
-				STR R1, R6, -1 		;Store result R1 in stack
-				RET
+				ADD R6, R6, -2 	;Make space for args on stack
+				ADD R2, R2, R0	;str + i
+				ADD R2, R2, 1 	;str + i + 1
+				STR R2, R6, 0	;Store arg len = len - i - 1 on stack
+				NOT R0, R0		;Two's complement
+				ADD R0, R0, 1
+				ADD R1, R1, R0	;len - i
+				ADD R1, R1, -1 	;len - i - 1
+				STR R1, R6, 1 	;Store arg *str = str + i + 1
+				JSR EVAL 		;EVAL(str + i + 1, len - i - 1)
+				LDR R4, R6, 0	;Load RV from SP
+				STR R4, R5, -2 	;Store local var right on stack
 
-SKIP1		LDR R2, R6, -2		;Load current I
-			ADD R2, R2, 1 		;Increment I
-			STR R2, R6, -2 		;Save incremented I
-			BR PLUS				;Loop PLUS
+				LDR R3, R5, -1 	;Reload left
+				LDR R4, R5, -2 	;Reload right
+				ADD R0, R3, R4	;R0 = left + right
+				BR DONE
 
-BREAK1  ;Reset I and do MULT loop
+SKIP1		LDR R0, R5, 0		;Reload i
+			ADD R0, R0, 1 		;Increment i
+			STR R0, R5, 0 		;Save incremented i
+			BR LOOP1			;Loop LOOP1
 
-		LDR R0, R6, 0		;R0 = &str[0]
+BREAK1  AND R0, R0, 0	;Reinitialize i
+		STR R0, R5, 0	;Store i on stack
+
+		;LOOP2 loop condition
+LOOP2	LDR R1, R5, 5	;R1 = len
+		NOT R1, R1		;Two's complement
+		ADD R1, R1, 1
+		ADD R0, R0, R1	;i - len
+		BRzp BREAK2		;Done looping when (I - len) >= 0
+
+			;LOOP2 loop body
+			LDR R0, R5, 0	;Reload i
+			LDR R1, R5, 5 	;Reload len
+			LDR R2, R5, 4	;R2 = str
+
+			;LOOP2 if condition
+			ADD R2, R2, R0		;R2 = str + i
+			LDR R2, R2, 0		;R2 = *(str + i)
+			ADD R2, R2, -16		;char - 42 (ASCII value for '*')
+			ADD R2, R2, -16
+			ADD R2, R2, -10
+			BRnp SKIP2			;Skip if when current char =/= '*'
+
+				;LOOP2 if body
+				ADD R6, R6, -2 	;Make space for args on stack
+				LDR R2, R5, 4	;Reload str
+				STR R0, R6, 1	;Store arg len = i on stack
+				STR R2, R6, 0	;Store arg *str = str on stack
+				JSR EVAL 		;EVAL(str, i)
+				LDR R3, R6, 0	;Load RV from SP
+				STR R3, R5, -1 	;Store local var left on stack
+
+				ADD R6, R6, 3	;Destroy previous recurse and point SP to top of stack
+				LDR R0, R5, 0	;Reload i
+				LDR R1, R5, 5 	;Reload len
+				LDR R2, R5, 4	;R2 = str
+
+				ADD R6, R6, -2 	;Make space for args on stack
+				ADD R2, R2, R0	;str + i
+				ADD R2, R2, 1 	;str + i + 1
+				STR R2, R6, 0	;Store arg len = len - i - 1 on stack
+				NOT R0, R0		;Two's complement
+				ADD R0, R0, 1
+				ADD R1, R1, R0	;len - i
+				ADD R1, R1, -1 	;len - i - 1
+				STR R1, R6, 1 	;Store arg *str = str + i + 1
+				JSR EVAL 		;EVAL(str + i + 1, len - i - 1)
+				LDR R4, R6, 0	;Load RV from SP
+				STR R4, R5, -2 	;Store local var right on stack
+
+				LDR R3, R5, -1 	;Reload left
+				LDR R4, R5, -2 	;Reload right
+
+				AND R0, R0, 0	;Initialize product
+MULT			ADD R0, R0, R3	;R0 += R3
+				ADD R4, R4, -1 	;Decrement counter
+				BRp MULT		;If (counter > 0) -> LOOP
+
+				BR DONE
+
+SKIP2		LDR R0, R5, 0		;Reload i
+			ADD R0, R0, 1 		;Increment i
+			STR R0, R5, 0 		;Save incremented i
+			BR LOOP2	
+
+BREAK2	LDR R0, R5, 4		;R0 = str
 		LDR R0, R0, 0		;R0 = *str
 		ADD R0, R0, -16		;*str - '0'
 		ADD R0, R0, -16
 		ADD R0, R0, -16
-		STR R0, R6, -1 		;Store/return char's numerical value in stack
 
-        ;Post-subroutine stack management
-BREAK2  LDR R1, R6, 1 		;Reload len
-        LDR R0, R6, 0		;Reload *str
-        ;STR R5, R6, -1  	;Save subroutine result in R5
-        LDR R2, R6, -2 		;Reload index i
-        LDR R7, R6, -3 		;Reload return address
-        ADD R6, R6, 6 		;Pop - shift FP down
-
-        RET
+		;Finalizing stack operations
+DONE    STR R0, R5, 3   ;Store RV onto the stack
+	    LDR R7, R5, 2   ;Restore RA into R7
+	    ADD R6, R5, 3   ;Point SP at the RV
+	    LDR R5, R5, 1   ;Restore old FP
+	    RET 			;Return
 
 .end
