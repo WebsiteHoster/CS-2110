@@ -16,7 +16,7 @@ OFILES = main.o drawimage.o diddy.o test.o
 # The header files you have created.
 # This is necessary to determine when to recompile for files.
 # This should be a space (SPACE!) separated list of .h files
-HFILES = diddy.h test.h
+HFILES = diddy.h
 
 ################################################################################
 # These are various settings used to make the GBA toolchain work

@@ -6,7 +6,7 @@
 #include <ctype.h>
 
 // This is the array into which you will load the raw data from the file
-char data_arr[0x36 + 240 * 160 * 4];
+unsigned char data_arr[0x36 + 240 * 160 * 4];
 
 int main(int argc, char *argv[]) {
 
@@ -24,10 +24,20 @@ int main(int argc, char *argv[]) {
 	}
 
 	// 3. Read the file into the buffer then close it when you are done
-	int bytesRead = fread(data_arr, 1, sizeof(data_arr) / sizeof(char), fileIn);
-	for (int i = 0; i < bytesRead; i++) {
-		printf("0x%X, ", data_arr[i]);
+	int bytesRead = fread(data_arr, 1, sizeof(data_arr), fileIn);
+	for (int i = 0x36 + 1; i <= bytesRead; i += 4) {
+		data_arr[i - 1] /= 8;
+		printf("B=0x%02X, ", data_arr[i - 1]);
+		data_arr[i] /= 8;
+		printf("G=0x%02X, ", data_arr[i]);
+		data_arr[i + 1] /= 8;
+		printf("R=0x%02X, ", data_arr[i + 1]);
+
+		if ((i - 0x36) % 16 == 0) {
+			printf("\n");
+		}
 	}
+	printf("\n");
 	fclose(fileIn);
 
 	// 4. Get the width and height of the image
@@ -65,14 +75,42 @@ int main(int argc, char *argv[]) {
 	fileName[length] = '\0';
 	strcat(fileName, ".c");
 	FILE *dataFile = fopen(fileName, "w");
-	
+
+	printf("\n");
+	unsigned short colorData[sizeof(data_arr) - 0x36];
+	for (int i = 0; i < bytesRead; i++) {
+		colorData[i] = (data_arr[i + 0x36] << 10) | (data_arr[i + 0x37] << 5) | data_arr[i + 0x38];
+		printf("0x%04X, ", colorData[i]);
+	}
+	printf("\n");
+
+	fprintf(dataFile, "const unsigned short %s_data[%i] = {", shortName, width * height);
+
+	unsigned short gbaData[sizeof(data_arr)];
+	int k = 0;
 	for (int i = height - 1; i >= 0; i--) {
 		for (int j = 0; j < width; j++) {
+			unsigned short gbaPixel = gbaData[width * i + j];
+			gbaPixel = colorData[k];
+			k++;
 
+			if ((width * i + j) % 10 == 0) {
+				fprintf(dataFile, "\n\t");
+			}
+			fprintf(dataFile, "0x%04X, ", gbaPixel);
 		}
 	}
 
-	fprintf(dataFile, "const unsigned short %s_data[%i] = {\n", shortName, width * height);
+	/*for (int i = 0x36; i < bytesRead; i += 4) {
+		if ((i - 0x36) % 40 == 0) {
+			fprintf(dataFile, "\n\t");
+		}
+
+		unsigned short gbaPixel = (gbaData[i] << 10) | (gbaData[i + 1] << 5) | gbaData[i + 2];
+		fprintf(dataFile, "0x%04X, ", gbaPixel);
+	}*/
+
+	fprintf(dataFile, "\n};");
 
 	fclose(dataFile);
 
