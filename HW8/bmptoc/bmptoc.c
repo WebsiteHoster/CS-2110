@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// 2. Open the file; if it doesn't exist, tell the user and then exit
-	FILE *fileIn = fopen(argv[1],  "rb");
+	FILE *fileIn = fopen(argv[1],  "r");
 	if (fileIn == NULL) {
 		printf("File not found.\n");
 		return -1;
@@ -25,27 +25,21 @@ int main(int argc, char *argv[]) {
 
 	// 3. Read the file into the buffer then close it when you are done
 	int bytesRead = fread(data_arr, 1, sizeof(data_arr), fileIn);
-	for (int i = 0x36 + 1; i <= bytesRead; i += 4) {
-		data_arr[i - 1] /= 8;
-		printf("B=0x%02X, ", data_arr[i - 1]);
-		data_arr[i] /= 8;
-		printf("G=0x%02X, ", data_arr[i]);
-		data_arr[i + 1] /= 8;
-		printf("R=0x%02X, ", data_arr[i + 1]);
 
-		if ((i - 0x36) % 16 == 0) {
-			printf("\n");
-		}
+	//Compress pixel data to fit in GBA format
+	for (int i = 0x36; i < bytesRead; i += 4) {
+		data_arr[i] /= 8;
+		data_arr[i + 1] /= 8;
+		data_arr[i + 2] /= 8;
 	}
-	printf("\n");
+
 	fclose(fileIn);
 
 	// 4. Get the width and height of the image
 	int width, height;
-
 	int* pdata_arr = (int*) (data_arr + 0x12);
-	width = *pdata_arr;
 
+	width = *pdata_arr;
 	pdata_arr = (int*) (data_arr + 0x16);
 	height = *pdata_arr;
 
@@ -54,17 +48,21 @@ int main(int argc, char *argv[]) {
 	char shortName[100];
 	int length = strlen(fileName);
 
+	//Remove file extension and replace with .h
 	fileName[length - 4] = '\0';
 	strcpy(shortName, fileName);
 	strcat(fileName, ".h");
+
 	FILE *headerFile = fopen(fileName, "w");
 
+	//Copy the file name in caps
 	length = strlen(shortName);
 	char caps[length];
 	for (int  i = 0; i <= length; i++) {
 		caps[i] = toupper(shortName[i]);
 	}
 
+	//Write header contents
 	fprintf(headerFile, "#define %s_WIDTH %i\n", caps, width);
 	fprintf(headerFile, "#define %s_HEIGHT %i\n", caps, height);
 	fprintf(headerFile, "const unsigned short %s_data[%i];", shortName, width * height);
@@ -72,43 +70,37 @@ int main(int argc, char *argv[]) {
 	fclose(headerFile);
 
 	// 6. Create c file, and write pixel data; close it
+	//Remove file extension and replace with .c
 	fileName[length] = '\0';
 	strcat(fileName, ".c");
 	FILE *dataFile = fopen(fileName, "w");
 
-	printf("\n");
-	unsigned short colorData[sizeof(data_arr) - 0x36];
-	for (int i = 0; i < bytesRead; i++) {
-		colorData[i] = (data_arr[i + 0x36] << 10) | (data_arr[i + 0x37] << 5) | data_arr[i + 0x38];
-		printf("0x%04X, ", colorData[i]);
+	//Make new array to store GBA pixel data in proper format
+	int imgLength = width * height;
+	int j = 0;
+	unsigned short colorData[imgLength];
+	
+	//Concatenate color values
+	for (int i = 0; i < imgLength; i++) {
+		colorData[i] = (data_arr[j + 0x36] << 10) | (data_arr[j + 0x37] << 5) | data_arr[j + 0x38];
+		j += 4;
 	}
-	printf("\n");
 
 	fprintf(dataFile, "const unsigned short %s_data[%i] = {", shortName, width * height);
 
-	unsigned short gbaData[sizeof(data_arr)];
+	//Write pixel data to file, accounting for BMP reverse row order
 	int k = 0;
 	for (int i = height - 1; i >= 0; i--) {
 		for (int j = 0; j < width; j++) {
-			unsigned short gbaPixel = gbaData[width * i + j];
-			gbaPixel = colorData[k];
-			k++;
+			unsigned short gbaPixel = colorData[width * i + j];
 
-			if ((width * i + j) % 10 == 0) {
+			if (k % 10 == 0) {
 				fprintf(dataFile, "\n\t");
 			}
 			fprintf(dataFile, "0x%04X, ", gbaPixel);
+			k++;
 		}
 	}
-
-	/*for (int i = 0x36; i < bytesRead; i += 4) {
-		if ((i - 0x36) % 40 == 0) {
-			fprintf(dataFile, "\n\t");
-		}
-
-		unsigned short gbaPixel = (gbaData[i] << 10) | (gbaData[i + 1] << 5) | gbaData[i + 2];
-		fprintf(dataFile, "0x%04X, ", gbaPixel);
-	}*/
 
 	fprintf(dataFile, "\n};");
 

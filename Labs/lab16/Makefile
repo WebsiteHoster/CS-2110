@@ -1,22 +1,22 @@
 ################################################################################
 # These are variables for the GBA toolchain build
 # You can add others if you wish to
-# imagetester for bmptoc
+# Jesse Chen
 ################################################################################
 
 # The name of your desired GBA game
 # This should be a just a name i.e MyFirstGBAGame
 # No SPACES AFTER THE NAME.
-PROGNAME = imagetester
+PROGNAME = lab16
 
 # The object files you want to compile into your program
 # This should be a space (SPACE!) separated list of .o files
-OFILES = main.o drawimage.o diddy.o test.o smugcat.o smwabridged.o
+OFILES = lab16.o
 
 # The header files you have created.
 # This is necessary to determine when to recompile for files.
 # This should be a space (SPACE!) separated list of .h files
-HFILES = diddy.h test.h smugcat.h smwabridged.h
+HFILES =
 
 ################################################################################
 # These are various settings used to make the GBA toolchain work
@@ -78,14 +78,10 @@ vba : $(PROGNAME).gba
 	@echo "[EXECUTE] Running Emulator VBA-M"
 	@vbam $(VBAOPT) $(PROGNAME).gba > /dev/null 2> /dev/null
 
-wxvba : CFLAGS += $(CRELEASE)
-wxvba : $(PROGNAME).gba
-	@echo "[EXECUTE] Running Emulator WXVBAM"
-	@wxvbam $(PROGNAME).gba
-
 med : CFLAGS += $(CRELEASE)
 med : $(PROGNAME).gba
 	@echo "[EXECUTE] Running emulator Mednafen"
 	@mednafen $(PROGNAME).gba > /dev/null 2>&1
 
 -include $(CFILES:%.c=%.d)
+
