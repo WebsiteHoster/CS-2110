@@ -1,8 +1,8 @@
 #include "myLib.h"
 
-unsigned short *videoBuffer = (unsigned short *)0x6000000;
+u16 *videoBuffer = (unsigned short *)0x6000000;
 
-void drawImage3(int row, int col, int width, int height, const u16* image)
+void drawImage3(int row, int col, int height, int width, const u16* image)
 {
 	for (int i = 0; i < height; i++)
 	{
@@ -23,23 +23,29 @@ void drawRect(int row, int col, int height, int width, u16 color)
 	for (int i = 0; i < height; i++)
 	{
 		DMA[3].dst = videoBuffer + OFFSET(row + i, col, 240);
-		DMA[3].cnt = width | DMA_SOURCE_FIXED | DMA_ON;
+		DMA[3].cnt = width | DMA_ON | DMA_SOURCE_FIXED;
 	}
 }
 
+void fillScreen(volatile u16 color)
+{
+	DMA[3].src = &color;
+	DMA[3].dst = videoBuffer;
+	DMA[3].cnt = SCREEN_SIZE | DMA_ON | DMA_SOURCE_FIXED;
+}
 
 int boundsCheck(int *var, int bound, int *delta, int size)
 {
 		if (*var < 0)
 		{
 			*var = 0;
-			*delta = -*delta;
+			//*delta = -*delta;
 			return 1;
 		}
-		if (*var > bound-size+1)
+		if (*var > bound - size+1)
 		{
-			*var = bound-size+1;
-			*delta = -*delta;
+			*var = bound - size+1;
+			//*delta = -*delta;
 		}
 		return 0;
 
@@ -47,6 +53,6 @@ int boundsCheck(int *var, int bound, int *delta, int size)
 
 void WaitForVblank()
 {
-	while(SCANLINECOUNTER > 160);
-	while(SCANLINECOUNTER < 160);
+	while (SCANLINECOUNTER > 160);
+	while (SCANLINECOUNTER < 160);
 }

@@ -1,7 +1,7 @@
 ################################################################################
 # These are variables for the GBA toolchain build
 # You can add others if you wish to
-# ***** YOUR NAME HERE *****
+# Jesse Chen
 ################################################################################
 
 # The name of your desired GBA game
@@ -11,12 +11,14 @@ PROGNAME = Game
 
 # The object files you want to compile into your program
 # This should be a space (SPACE!) separated list of .o files
-OFILES = main.o myLib.o text.o font.o
+OFILES = main.o myLib.o text.o font.o title.o player.o
+#up.o down.o left.o right.o
 
 # The header files you have created.
 # This is necessary to determine when to recompile for files.
 # This should be a space (SPACE!) separated list of .h files
-HFILES = myLib.h text.h
+HFILES = myLib.h text.h title.h player.h
+#up.h down.h left.h right.h
 
 ################################################################################
 # These are various settings used to make the GBA toolchain work

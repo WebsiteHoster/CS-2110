@@ -1,5 +1,9 @@
 typedef unsigned short u16;
 
+#define SCREEN_SIZE 38400
+#define SCREEN_HEIGHT 160
+#define SCREEN_WIDTH 240
+
 #define REG_DISPCTL *(unsigned short *)0x4000000
 #define MODE3 3
 #define BG2_ENABLE (1<<10)
@@ -12,7 +16,7 @@ typedef unsigned short u16;
 #define YELLOW COLOR(31,31,0)
 #define WHITE COLOR(31,31,31)
 #define BLACK 0
-#define LTGRAY COLOR(25, 25, 25)
+#define BGCOLOR COLOR(15, 24, 16)
 #define SCANLINECOUNTER  (*(volatile unsigned short *)0x4000006)
 
 #define OFFSET(r, c, numcols) ((r)*(numcols)+(c))
@@ -77,8 +81,9 @@ typedef struct
 extern unsigned short *videoBuffer;
 
 // Prototype
-void drawImage3(int row, int col, int width, int height, const u16* image);
+void drawImage3(int row, int col, int height, int width, const u16* image);
 void setPixel(int row, int col, u16 color);
 void drawRect(int row, int col, int height, int width, u16 color);
+void fillScreen(u16 color);
 int boundsCheck(int *var, int bound, int *delta, int size);
 void WaitForVblank();

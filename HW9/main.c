@@ -3,7 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NUMOBJS 7
+#include "title.h"
+#include "player.h"
+/*#include "up.h"
+#include "down.h"
+#include "left.h"
+#include "right.h"*/
+
+/*#define NUMOBJS 7
 
 typedef struct {
 
@@ -13,92 +20,94 @@ typedef struct {
 	int cd;
 	int size;
 	u16 color;
-} MOVOBJ;
+} MOVOBJ;*/
+
+int state;
+int curRow;
+int curCol;
+int oldRow, oldCol;
+
+void init()
+{
+	drawImage3(0, 0, TITLE_HEIGHT, TITLE_WIDTH, title);
+	state = 0;
+	curRow = (SCREEN_HEIGHT / 2) - (UP_HEIGHT / 2);
+	curCol = (SCREEN_WIDTH / 2) - (UP_WIDTH / 2);
+}
 
 int main()
 {
 	REG_DISPCTL = MODE3 | BG2_ENABLE;
-	char buffer[41];
-	int i;
-	int dels[] = {-3, -2, -1, 1, 2, 3};
-	int numdels = sizeof(dels)/sizeof(dels[0]);
-	u16 colors[] = {RED, GREEN, BLUE, MAGENTA, CYAN, YELLOW, WHITE};
-	int numcolors = sizeof(colors)/sizeof(colors[0]);
-	MOVOBJ objs[NUMOBJS];
-	MOVOBJ oldobjs[NUMOBJS];
-	MOVOBJ *cur;
-	for(i=0; i<NUMOBJS; i++)
-	{
-		objs[i].row = 70 +  rand()% 20;
-		objs[i].col = 110 + rand()%20;
-		objs[i].rd = dels[rand()%numdels];
-		objs[i].cd = dels[rand()%numdels];
-		objs[i].color = colors[i%numcolors];
-		oldobjs[i] = objs[i];
-	}
-	int size = 5;
-	int oldsize = size;
-	int score = 0;
-	/*
-	int r,c;
-	int ch = 0;
-	for(r=0; r<16;r++)
-	{
-		for(c=0; c<16; c++)
-		{
-			drawChar(r*9, c*9, ch++, YELLOW);
-		}
-	}
-	while(1);
-	*/
-	u16 bgcolor = LTGRAY;
-	DMA[3].src = &bgcolor;
-	DMA[3].dst = videoBuffer;
-	DMA[3].cnt = 38400 | DMA_ON | DMA_SOURCE_FIXED;
-	
-	while(1) // Game Loop
-	{
-		if(KEY_DOWN_NOW(BUTTON_UP))
-		{
-			size++;
-			if(size>150)
-				size=150;
-		}
-		if(KEY_DOWN_NOW(BUTTON_DOWN))
-		{
-			size--;
-			if(size<3)
-				size=3;
-		}
-		for(i=0; i<NUMOBJS; i++)
-		{
-			//cur = &objs[i];
-			cur = objs + i;
 
-			cur->row = cur->row + cur->rd;
-			cur->col = cur->col + cur->cd;
-			
-			if(boundsCheck(&cur->row, 149, &cur->rd, size))
-			{
-				score++;
-			}
-			boundsCheck(&cur->col, 239, &cur->cd, size);
-			sprintf(buffer, "Score: %d", score);
-		} // for
-			WaitForVblank();
-		for(i=0; i<NUMOBJS; i++)
+	init();
+
+	while (1) // Game Loop
+	{
+		WaitForVblank();
+
+		if (KEY_DOWN_NOW(BUTTON_SELECT))
 		{
-		
-			drawRect(oldobjs[i].row, oldobjs[i].col, oldsize, oldsize, bgcolor);
+			init();
 		}
-		for(i=0; i<NUMOBJS;i++)
+
+		switch (state)
 		{
-			cur = objs + i;
-			drawRect(cur->row, cur->col, size, size, cur->color);
-			oldobjs[i] = objs[i];
-			drawRect(150, 41, 10, 36, bgcolor);
-			drawString(150, 5, buffer, YELLOW);
-		} // for
-		oldsize = size;
+			case 0:
+				if (KEY_DOWN_NOW(BUTTON_START))
+				{
+					fillScreen(BGCOLOR);
+					state = 1;
+				}
+			break;
+			case 1:
+				oldRow = curRow;
+				oldCol = curCol;
+
+				if (KEY_DOWN_NOW(BUTTON_UP))
+				{
+					curRow--;
+				}
+				else if (KEY_DOWN_NOW(BUTTON_DOWN))
+				{
+					curRow++;
+				}
+				else if (KEY_DOWN_NOW(BUTTON_LEFT))
+				{
+					curCol--;
+				}
+				else if (KEY_DOWN_NOW(BUTTON_RIGHT))
+				{
+					curCol++;
+				}
+				
+				boundsCheck(&curRow, SCREEN_HEIGHT - 1, 0, UP_HEIGHT);
+				boundsCheck(&curCol, SCREEN_WIDTH - 1, 0, UP_WIDTH);
+
+				//drawRect(oldRow, oldCol, 10, 10, BLACK);
+				//drawRect(curRow, curCol, 10, 10, RED);
+				
+				if (KEY_DOWN_NOW(BUTTON_UP))
+				{
+					drawRect(oldRow, oldCol, UP_HEIGHT, UP_WIDTH, BGCOLOR);
+					drawImage3(curRow, curCol, UP_HEIGHT, UP_WIDTH, up);
+				}
+				else if (KEY_DOWN_NOW(BUTTON_DOWN))
+				{
+					drawRect(oldRow, oldCol, UP_HEIGHT, UP_WIDTH, BGCOLOR);
+					drawImage3(curRow, curCol, DOWN_HEIGHT, DOWN_WIDTH, down);
+				}
+				else if (KEY_DOWN_NOW(BUTTON_LEFT))
+				{
+					drawRect(oldRow, oldCol, UP_HEIGHT, UP_WIDTH, BGCOLOR);
+					drawImage3(curRow, curCol, LEFT_HEIGHT, LEFT_WIDTH, left);
+				}
+				else if (KEY_DOWN_NOW(BUTTON_RIGHT))
+				{
+					drawRect(oldRow, oldCol, UP_HEIGHT, UP_WIDTH, BGCOLOR);
+					drawImage3(curRow, curCol, RIGHT_HEIGHT, RIGHT_WIDTH, right);
+				}
+
+			break;
+		}
 	} // while gameloop
 }
