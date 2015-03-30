@@ -1,7 +1,7 @@
 ################################################################################
 # These are variables for the GBA toolchain build
 # You can add others if you wish to
-# NOTICE:  Your name here or you will lose points
+# NOTICE:  Jesse Chen
 ################################################################################
 
 # The name of your desired GBA game
@@ -16,7 +16,7 @@ OFILES = main.o mylib.o mystery.o
 # The header files you have created.
 # This is necessary to determine when to recompile for files.
 # This should be a space (SPACE!) separated list of .h files
-HFILES = mylib.h
+HFILES = mylib.h mystery.h
 
 ################################################################################
 # These are various settings used to make the GBA toolchain work

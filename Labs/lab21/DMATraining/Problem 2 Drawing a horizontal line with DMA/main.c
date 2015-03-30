@@ -3,6 +3,7 @@
 
 u16 junk[240];
 void drawJunk(int y);
+void fillJunk();
 
 int main(void)
 {
@@ -16,8 +17,9 @@ int main(void)
 	while (1)
 	{
 		waitForVblank();
-		for (i = 0; i < 240; i++)
-			drawJunk(i);
+		//for (i = 0; i < 240; i++)
+		//	drawJunk(i);
+		fillJunk();
 	}
 }
 
@@ -30,7 +32,9 @@ kinda like a gradient going from black to red */
 /* i.e. if y is one then only the second row of the videoBuffer should be filled*/
 void drawJunk(int y)
 {
-
+	DMA[3].src = &junk;
+	DMA[3].dst = videoBuffer + (y * 240);
+	DMA[3].cnt = 240 | DMA_ON;
 }
 
 /* Now I was nice enough to write the code that will call this for each row
@@ -44,14 +48,19 @@ but how many times will this loop need to be ran?
 void fillJunk()
 {
 	/* Declare some junk */
-	u16 myJunk[120];
+	u16 myJunk[7];
 	int i;
 	
-	for (i = 0; i < 120; i++)
+	for (i = 0; i < sizeof(myJunk) / sizeof(u16); i++)
 		myJunk[i] = rand() % 32767; /* Hey random color here */
 		
 	/* Your code here repeatedly DMA myJunk to fill the screen */
-	
+	for (int i = 0; i < 160; i++)
+	{
+		DMA[3].src = &myJunk;
+		DMA[3].dst = videoBuffer + (i * 240);
+		DMA[3].cnt = 240 | DMA_ON;
+	}
 }
 
 
