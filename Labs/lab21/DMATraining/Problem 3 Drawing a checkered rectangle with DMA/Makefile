@@ -1,7 +1,7 @@
 ################################################################################
 # These are variables for the GBA toolchain build
 # You can add others if you wish to
-# NOTICE:  Your name here or you will lose points
+# NOTICE:  Jesse Chen
 ################################################################################
 
 # The name of your desired GBA game

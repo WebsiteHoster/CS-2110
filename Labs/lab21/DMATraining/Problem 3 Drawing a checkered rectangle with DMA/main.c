@@ -10,7 +10,7 @@ int main(void)
     while (1)
     {
     	waitForVblank();
-		drawCheckeredRect(10, 20, 100, 3, RGB(0, 0, 31), 32767, RGB(31, 0, 0));
+		  drawCheckeredRect(10, 20, 100, 3, RGB(0, 0, 31), 32767, RGB(31, 0, 0));
     }
 }
 
