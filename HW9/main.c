@@ -3,12 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "title.h"
+//Include images
 #include "player.h"
-/*#include "up.h"
-#include "down.h"
-#include "left.h"
-#include "right.h"*/
+#include "title.h"
+#include "win.h"
+#include "lose.h"
 
 /*#define NUMOBJS 7
 
@@ -27,12 +26,62 @@ int curRow;
 int curCol;
 int oldRow, oldCol;
 
+/**
+ * Initializes/reinitializes the game to title screen
+ */
 void init()
 {
 	drawImage3(0, 0, TITLE_HEIGHT, TITLE_WIDTH, title);
 	state = 0;
-	curRow = (SCREEN_HEIGHT / 2) - (UP_HEIGHT / 2);
-	curCol = (SCREEN_WIDTH / 2) - (UP_WIDTH / 2);
+}
+
+/**
+ * Checks boundaries and moves player
+ *
+ * @param dir Direction the player is facing
+ *				0: up
+ *				1: down
+ *				2: left
+ *				3: right
+ */
+void move(int dir)
+{
+	switch (dir) //Change row/col position
+	{
+		case 0:
+			curRow--;
+		break;
+		case 1:
+			curRow++;
+		break;
+		case 2:
+			curCol--;
+		break;
+		case 3:
+			curCol++;
+		break;
+	}
+
+	boundsCheck(&curRow, SCREEN_HEIGHT - 1, 0, UP_HEIGHT);
+	boundsCheck(&curCol, SCREEN_WIDTH - 1, 0, UP_WIDTH);
+
+	drawRect(oldRow, oldCol, UP_HEIGHT, UP_WIDTH, BGCOLOR);
+
+	switch (dir) //Move/redraw player
+	{
+		case 0:
+			drawImage3(curRow, curCol, UP_HEIGHT, UP_WIDTH, up);
+		break;
+		case 1:
+			drawImage3(curRow, curCol, DOWN_HEIGHT, DOWN_WIDTH, down);
+		break;
+		case 2:
+			drawImage3(curRow, curCol, LEFT_HEIGHT, LEFT_WIDTH, left);
+		break;
+		case 3:
+			drawImage3(curRow, curCol, RIGHT_HEIGHT, RIGHT_WIDTH, right);
+		break;
+	}
 }
 
 int main()
@@ -41,7 +90,7 @@ int main()
 
 	init();
 
-	while (1) // Game Loop
+	while (1) //Game loop
 	{
 		WaitForVblank();
 
@@ -50,63 +99,59 @@ int main()
 			init();
 		}
 
-		switch (state)
+		switch (state) //Determine game state
 		{
-			case 0:
+			case 0: //Title screen
 				if (KEY_DOWN_NOW(BUTTON_START))
 				{
 					fillScreen(BGCOLOR);
+
+					curRow = (SCREEN_HEIGHT / 2) - (UP_HEIGHT / 2);
+					curCol = (SCREEN_WIDTH / 2) - (UP_WIDTH / 2);
+
+					drawImage3(curRow, curCol, DOWN_HEIGHT, DOWN_WIDTH, down);
 					state = 1;
 				}
 			break;
-			case 1:
+			case 1: //Main gameplay
 				oldRow = curRow;
 				oldCol = curCol;
 
 				if (KEY_DOWN_NOW(BUTTON_UP))
 				{
-					curRow--;
+					//setDir(0);
+					move(0);
 				}
 				else if (KEY_DOWN_NOW(BUTTON_DOWN))
 				{
-					curRow++;
+					//setDir(1);
+					move(1);
 				}
 				else if (KEY_DOWN_NOW(BUTTON_LEFT))
 				{
-					curCol--;
+					//setDir(2);
+					move(2);
 				}
 				else if (KEY_DOWN_NOW(BUTTON_RIGHT))
 				{
-					curCol++;
-				}
-				
-				boundsCheck(&curRow, SCREEN_HEIGHT - 1, 0, UP_HEIGHT);
-				boundsCheck(&curCol, SCREEN_WIDTH - 1, 0, UP_WIDTH);
-
-				//drawRect(oldRow, oldCol, 10, 10, BLACK);
-				//drawRect(curRow, curCol, 10, 10, RED);
-				
-				if (KEY_DOWN_NOW(BUTTON_UP))
-				{
-					drawRect(oldRow, oldCol, UP_HEIGHT, UP_WIDTH, BGCOLOR);
-					drawImage3(curRow, curCol, UP_HEIGHT, UP_WIDTH, up);
-				}
-				else if (KEY_DOWN_NOW(BUTTON_DOWN))
-				{
-					drawRect(oldRow, oldCol, UP_HEIGHT, UP_WIDTH, BGCOLOR);
-					drawImage3(curRow, curCol, DOWN_HEIGHT, DOWN_WIDTH, down);
-				}
-				else if (KEY_DOWN_NOW(BUTTON_LEFT))
-				{
-					drawRect(oldRow, oldCol, UP_HEIGHT, UP_WIDTH, BGCOLOR);
-					drawImage3(curRow, curCol, LEFT_HEIGHT, LEFT_WIDTH, left);
-				}
-				else if (KEY_DOWN_NOW(BUTTON_RIGHT))
-				{
-					drawRect(oldRow, oldCol, UP_HEIGHT, UP_WIDTH, BGCOLOR);
-					drawImage3(curRow, curCol, RIGHT_HEIGHT, RIGHT_WIDTH, right);
+					//setDir(3);
+					move(3);
 				}
 
+				if (KEY_DOWN_NOW(BUTTON_A))
+				{
+					state = 2;
+				}
+				else if (KEY_DOWN_NOW(BUTTON_B))
+				{
+					state = 3;
+				}
+			break;
+			case 2: //Win screen
+				drawImage3(0, 0, WIN_HEIGHT, WIN_WIDTH, win);
+			break;
+			case 3: //Lose screen
+				drawImage3(0, 0, LOSE_HEIGHT, LOSE_WIDTH, lose);
 			break;
 		}
 	} // while gameloop
