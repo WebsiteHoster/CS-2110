@@ -78,7 +78,7 @@ void addFood(Engine *e)
 
 }
 
-void checkEat(Engine *e, Player *p, Food *f)
+void checkCollideFood(Engine *e, Player *p, Food *f)
 {
 	Food_t type = f->type;
 	int pHeight = RIGHT_HEIGHT;

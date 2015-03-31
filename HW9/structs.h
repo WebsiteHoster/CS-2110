@@ -5,11 +5,16 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
+typedef enum { BURGER, PIZZA, CHICKEN, CAKE, DONUT } Food_t;
+//typedef enum { BURGER, PIZZA, CHICKEN, CAKE, DONUT, PLAYER, BROCCOLI } Collideable_t;
+
 typedef struct
 {
 	int state;
+	int level;
 	int timer;
 	int foodCount;
+	
 } Engine;
 
 typedef struct
@@ -20,9 +25,6 @@ typedef struct
  	int oldCol;
  	int facing;
 } Player;
-
-typedef enum { BURGER, PIZZA, CHICKEN, CAKE, DONUT } Food_t;
-//typedef enum { BURGER, PIZZA, CHICKEN, CAKE, DONUT, PLAYER, BROCCOLI } Collideable_t;
 
 typedef struct
 {
@@ -46,7 +48,7 @@ void movePlayer(Player *p, int dir);
 void moveBroccoli(Broccoli *b);
 //void checkCollision(Collideable_t c1, Collideable_t c2);
 void addFood(Engine *e);
-void checkEat(Engine *e, Player *p, Food *f);
+void checkCollideFood(Engine *e, Player *p, Food *f);
 void eatFood(Engine *e, Food *f, int height, int width);
 
 #endif
