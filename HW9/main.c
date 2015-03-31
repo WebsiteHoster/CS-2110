@@ -16,6 +16,9 @@
 #include "food.h"
 #include "broccoli.h"
 
+Food_t foodTypes[5] = {BURGER, PIZZA, CHICKEN, CAKE, DONUT};
+Food foods[5];
+
 /**
  * Initializes/reinitializes the game to title screen
  */
@@ -27,21 +30,59 @@ void init(Engine *e, Player *p)
 	e->timer = 0;
 	e->foodCount = 5;
 
-	p->curRow = 0;
-	p->curCol = 0;
+	p->curRow = (SCREEN_HEIGHT / 2) - (RIGHT_HEIGHT / 2);
+	p->curCol = (SCREEN_WIDTH / 2) - (RIGHT_WIDTH / 2);
 	p->facing = 1;
 }
 
 void startLevel(Engine *e)
 {
-	Food foods[e->foodCount];
 	for (int i = 0; i < e->foodCount; i++)
 	{
-		foods[i].type = BURGER;
+		foods[i].type = foodTypes[rand() % 5];
 		foods[i].isEaten = 0;
-		foods[i].row = 50 + rand() % 85;
-		foods[i].col = 50 + rand() % 165;
-		drawImage3(foods[i].row, foods[i].col, BURGER_HEIGHT, BURGER_WIDTH, burger);
+		foods[i].row = rand() % 135;
+		foods[i].col = rand() % 215;
+
+		int height = 0;
+		int width = 0;
+		const u16 *image;
+
+		switch (foods[i].type)
+		{
+			case BURGER:
+				height = BURGER_HEIGHT;
+				width = BURGER_WIDTH;
+				image = burger;
+			break;
+			case PIZZA:
+				height = PIZZA_HEIGHT;
+				width = PIZZA_WIDTH;
+				image = pizza;
+			break;
+			case CHICKEN:
+				height = CHICKEN_HEIGHT;
+				width = CHICKEN_WIDTH;
+				image = chicken;
+			break;
+			case CAKE:
+				height = CAKE_HEIGHT;
+				width = CAKE_WIDTH;
+				image = cake;
+			break;
+			case DONUT:
+				height = DONUT_HEIGHT;
+				width = DONUT_WIDTH;
+				image = donut;
+			break;
+			default:
+				height = BURGER_HEIGHT;
+				width = BURGER_WIDTH;
+				image = burger;
+			break;
+		}
+
+		drawImage3(foods[i].row, foods[i].col, height, width, image);
 	}
 }
 
@@ -77,11 +118,6 @@ int main()
 					engine.state = 1;
 
 					startLevel(&engine);
-					/*drawImage3(0, 0, BURGER_HEIGHT, BURGER_WIDTH, burger);
-					drawImage3(0, 25, PIZZA_HEIGHT, PIZZA_WIDTH, pizza);
-					drawImage3(0, 50, CHICKEN_HEIGHT, CHICKEN_WIDTH, chicken);
-					drawImage3(0, 75, CAKE_HEIGHT, CAKE_WIDTH, cake);
-					drawImage3(0, 100, DONUT_HEIGHT, DONUT_WIDTH, donut);*/
 				}
 			break;
 			case 1: //Main gameplay
@@ -96,10 +132,22 @@ int main()
 					movePlayer(&player, 2);
 				if (KEY_DOWN_NOW(BUTTON_RIGHT))
 					movePlayer(&player, 3);
+				else
+					movePlayer(&player, -1);
 
+				int isEmpty = 1;
 				for (int i = 0; i < engine.foodCount; i++)
 				{
-					//checkCollideFood(engine, player, food);
+					if (foods[i].isEaten == 0)
+					{
+						checkCollideFood(&engine, &player, &foods[i]);
+						isEmpty = 0;
+					}
+				}
+
+				if (isEmpty == 1)
+				{
+					engine.state = 2;
 				}
 
 				if (KEY_DOWN_NOW(BUTTON_A))

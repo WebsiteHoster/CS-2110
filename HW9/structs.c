@@ -83,8 +83,7 @@ void checkCollideFood(Engine *e, Player *p, Food *f)
 	Food_t type = f->type;
 	int pHeight = RIGHT_HEIGHT;
 	int pWidth = RIGHT_WIDTH;
-	int fHeight = 0;
-	int fWidth = 0;
+	int fHeight, fWidth;
 
 	switch (type)
 	{
@@ -108,10 +107,14 @@ void checkCollideFood(Engine *e, Player *p, Food *f)
 			fHeight = DONUT_HEIGHT;
 			fWidth = DONUT_WIDTH;
 		break;
+		default:
+			fHeight = 25;
+			fWidth = 25;
+		break;
 	}
 
-	if (p->curRow < (f->row + fHeight) || (p->curCol + pWidth) > f->col ||
-		(p->curRow + pHeight) > f->row || p->curCol < (f->col + fWidth))
+	if (p->curRow < (f->row + fHeight) && (p->curCol + pWidth) > f->col &&
+		(p->curRow + pHeight) > f->row && p->curCol < (f->col + fWidth))
 	{
 		eatFood(e, f, fHeight, fWidth);
 	}
@@ -119,7 +122,7 @@ void checkCollideFood(Engine *e, Player *p, Food *f)
 
 void eatFood(Engine *e, Food *f, int height, int width)
 {
-	e->foodCount--;
+	//e->foodCount--;
 	f->isEaten = 1;
 	drawRect(f->row, f->col, height, width, BGCOLOR);
 }
