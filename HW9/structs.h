@@ -12,9 +12,10 @@ typedef struct
 {
 	int state;
 	int level;
+	int score;
 	int timer;
-	int foodCount;
-	
+	int totalFood;
+	int curFood;
 } Engine;
 
 typedef struct
@@ -47,7 +48,7 @@ typedef struct
 void movePlayer(Player *p, int dir);
 void moveBroccoli(Broccoli *b);
 //void checkCollision(Collideable_t c1, Collideable_t c2);
-void addFood(Engine *e);
+void addFood(Engine *e, Food foods[], int i);
 void checkCollideFood(Engine *e, Player *p, Food *f);
 void eatFood(Engine *e, Food *f, int height, int width);
 

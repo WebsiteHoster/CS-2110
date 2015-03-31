@@ -4,6 +4,7 @@
 
 #include "structs.h"
 #include "myLib.h"
+#include <stdlib.h>
 
 #include "player.h"
 #include "food.h"
@@ -38,7 +39,7 @@ void movePlayer(Player *p, int dir)
 		break;
 	}
 
-	boundsCheck(&p->curRow, SCREEN_HEIGHT - 1, 0, RIGHT_HEIGHT);
+	boundsCheck(&p->curRow, SCREEN_HEIGHT - 11, 0, RIGHT_HEIGHT);
 	boundsCheck(&p->curCol, SCREEN_WIDTH - 1, 0, RIGHT_WIDTH);
 
 	drawRect(p->oldRow, p->oldCol, RIGHT_HEIGHT, RIGHT_WIDTH, BGCOLOR);
@@ -72,10 +73,57 @@ void moveBroccoli(Broccoli *b)
 
 }*/
 
-void addFood(Engine *e)
+void addFood(Engine *e, Food foods[], int i)
 {
-	e->foodCount++;
+	Food_t foodTypes[5] = {BURGER, PIZZA, CHICKEN, CAKE, DONUT};
 
+	foods[i].type = foodTypes[rand() % 5];
+	foods[i].isEaten = 0;
+	foods[i].row = rand() % 125;
+	foods[i].col = rand() % 215;
+
+	int height = 0;
+	int width = 0;
+	const u16 *image;
+
+	switch (foods[i].type)
+	{
+		case BURGER:
+			height = BURGER_HEIGHT;
+			width = BURGER_WIDTH;
+			image = burger;
+		break;
+		case PIZZA:
+			height = PIZZA_HEIGHT;
+			width = PIZZA_WIDTH;
+			image = pizza;
+		break;
+		case CHICKEN:
+			height = CHICKEN_HEIGHT;
+			width = CHICKEN_WIDTH;
+			image = chicken;
+		break;
+		case CAKE:
+			height = CAKE_HEIGHT;
+			width = CAKE_WIDTH;
+			image = cake;
+		break;
+		case DONUT:
+			height = DONUT_HEIGHT;
+			width = DONUT_WIDTH;
+			image = donut;
+		break;
+		default:
+			height = BURGER_HEIGHT;
+			width = BURGER_WIDTH;
+			image = burger;
+		break;
+	}
+
+	drawImage3(foods[i].row, foods[i].col, height, width, image);
+
+	e->curFood++;
+	e->totalFood++;
 }
 
 void checkCollideFood(Engine *e, Player *p, Food *f)
@@ -122,7 +170,8 @@ void checkCollideFood(Engine *e, Player *p, Food *f)
 
 void eatFood(Engine *e, Food *f, int height, int width)
 {
-	//e->foodCount--;
+	e->curFood--;
+	e->score++;
 	f->isEaten = 1;
 	drawRect(f->row, f->col, height, width, BGCOLOR);
 }

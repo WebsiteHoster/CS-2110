@@ -16,8 +16,10 @@
 #include "food.h"
 #include "broccoli.h"
 
-Food_t foodTypes[5] = {BURGER, PIZZA, CHICKEN, CAKE, DONUT};
-Food foods[5];
+#define MAX_FOOD 50
+
+Food foods[MAX_FOOD];
+int curFoodIndex;
 
 /**
  * Initializes/reinitializes the game to title screen
@@ -26,63 +28,28 @@ void init(Engine *e, Player *p)
 {
 	drawImage3(0, 0, TITLE_HEIGHT, TITLE_WIDTH, title);
 	e->state = 0;
-	e->level = 1;
+	e->level = 0;
+	e->score = 0;
 	e->timer = 0;
-	e->foodCount = 5;
 
 	p->curRow = (SCREEN_HEIGHT / 2) - (RIGHT_HEIGHT / 2);
 	p->curCol = (SCREEN_WIDTH / 2) - (RIGHT_WIDTH / 2);
 	p->facing = 1;
 }
 
-void startLevel(Engine *e)
+void startLevel(Engine *e, Player *p)
 {
-	for (int i = 0; i < e->foodCount; i++)
+	fillScreen(BGCOLOR);
+	drawImage3(p->curRow, p->curCol, RIGHT_HEIGHT, RIGHT_WIDTH, right);
+
+	e->state = 1;
+	e->level++;
+	e->totalFood = 0;
+	e->curFood = 0;
+
+	for (curFoodIndex = 0; curFoodIndex < 5; curFoodIndex++)
 	{
-		foods[i].type = foodTypes[rand() % 5];
-		foods[i].isEaten = 0;
-		foods[i].row = rand() % 135;
-		foods[i].col = rand() % 215;
-
-		int height = 0;
-		int width = 0;
-		const u16 *image;
-
-		switch (foods[i].type)
-		{
-			case BURGER:
-				height = BURGER_HEIGHT;
-				width = BURGER_WIDTH;
-				image = burger;
-			break;
-			case PIZZA:
-				height = PIZZA_HEIGHT;
-				width = PIZZA_WIDTH;
-				image = pizza;
-			break;
-			case CHICKEN:
-				height = CHICKEN_HEIGHT;
-				width = CHICKEN_WIDTH;
-				image = chicken;
-			break;
-			case CAKE:
-				height = CAKE_HEIGHT;
-				width = CAKE_WIDTH;
-				image = cake;
-			break;
-			case DONUT:
-				height = DONUT_HEIGHT;
-				width = DONUT_WIDTH;
-				image = donut;
-			break;
-			default:
-				height = BURGER_HEIGHT;
-				width = BURGER_WIDTH;
-				image = burger;
-			break;
-		}
-
-		drawImage3(foods[i].row, foods[i].col, height, width, image);
+		addFood(e, foods, curFoodIndex);
 	}
 }
 
@@ -92,6 +59,7 @@ int main()
 
 	Engine engine;
 	Player player;
+	char scoreBuffer[11];
 	init(&engine, &player);
 
 	while (1) //Game loop
@@ -110,20 +78,18 @@ int main()
 
 				if (KEY_DOWN_NOW(BUTTON_START))
 				{
-					srand(engine.timer);
-
-					fillScreen(BGCOLOR);
-
-					drawImage3(player.curRow, player.curCol, RIGHT_HEIGHT, RIGHT_WIDTH, right);
-					engine.state = 1;
-
-					startLevel(&engine);
+					srand(engine.timer); //Seed RNG
+					startLevel(&engine, &player);
 				}
 			break;
 			case 1: //Main gameplay
+				engine.timer++;
+
+				//Save old position
 				player.oldRow = player.curRow;
 				player.oldCol = player.curCol;
 
+				//Player movement
 				if (KEY_DOWN_NOW(BUTTON_UP))
 					movePlayer(&player, 0);
 				if (KEY_DOWN_NOW(BUTTON_DOWN))
@@ -135,8 +101,18 @@ int main()
 				else
 					movePlayer(&player, -1);
 
+				//Periodically add more food if there are less than 5 on
+				//screen and less than 5 * level have appeared in total
+				if (engine.timer > 50 && engine.curFood < 5 && engine.totalFood < 5 * engine.level)
+				{
+					addFood(&engine, foods, curFoodIndex);
+					curFoodIndex++;
+					engine.timer = 0;
+				}
+
+				//Check for collisions and if food is still on the screen
 				int isEmpty = 1;
-				for (int i = 0; i < engine.foodCount; i++)
+				for (int i = 0; i < 5 * engine.level; i++)
 				{
 					if (foods[i].isEaten == 0)
 					{
@@ -145,11 +121,18 @@ int main()
 					}
 				}
 
+				//If no food is left, go to state 2
 				if (isEmpty == 1)
 				{
 					engine.state = 2;
 				}
 
+				//Print score on screen
+				sprintf(scoreBuffer, "Score: %d", engine.score);
+				drawRect(151, 1 + 6 * 7, 8, 6 * 4, BGCOLOR);
+				drawString(151, 1, scoreBuffer, BLACK);
+
+				//Test controls
 				if (KEY_DOWN_NOW(BUTTON_A))
 					engine.state = 2;
 				else if (KEY_DOWN_NOW(BUTTON_B))
@@ -157,6 +140,11 @@ int main()
 			break;
 			case 2: //Win screen
 				drawImage3(0, 0, WIN_HEIGHT, WIN_WIDTH, win);
+
+				if (KEY_DOWN_NOW(BUTTON_START))
+				{
+					startLevel(&engine, &player);
+				}
 			break;
 			case 3: //Lose screen
 				drawImage3(0, 0, LOSE_HEIGHT, LOSE_WIDTH, lose);
