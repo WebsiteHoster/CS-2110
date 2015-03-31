@@ -11,13 +11,12 @@ PROGNAME = Game
 
 # The object files you want to compile into your program
 # This should be a space (SPACE!) separated list of .o files
-OFILES = main.o myLib.o text.o font.o title.o win.o lose.o player.o burger.o pizza.o chicken.o cake.o donut.o
-#up.o down.o left.o right.o
+OFILES = main.o myLib.o structs.o text.o font.o title.o win.o lose.o player.o food.o broccoli.o
 
 # The header files you have created.
 # This is necessary to determine when to recompile for files.
 # This should be a space (SPACE!) separated list of .h files
-HFILES = myLib.h text.h title.h  win.h lose.h player.h burger.h pizza.h chicken.h cake.h donut.h
+HFILES = myLib.h structs.h text.h title.h win.h lose.h player.h food.h broccoli.h
 #up.h down.h left.h right.h
 
 ################################################################################

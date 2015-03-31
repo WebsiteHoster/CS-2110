@@ -1,5 +1,10 @@
+/**
+ * Jesse Chen
+ */
+
 #include "myLib.h"
 #include "text.h"
+#include "structs.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,11 +13,8 @@
 #include "win.h"
 #include "lose.h"
 #include "player.h"
-#include "burger.h"
-#include "pizza.h"
-#include "chicken.h"
-#include "cake.h"
-#include "donut.h"
+#include "food.h"
+#include "broccoli.h"
 
 /*#define NUMOBJS 7
 
@@ -26,18 +28,25 @@ typedef struct {
 	u16 color;
 } MOVOBJ;*/
 
-int state;
+/*int state;
 int curRow;
 int curCol;
 int oldRow, oldCol;
+int facing;*/
 
 /**
  * Initializes/reinitializes the game to title screen
  */
-void init()
+void init(Engine *e, Player *p)
 {
 	drawImage3(0, 0, TITLE_HEIGHT, TITLE_WIDTH, title);
-	state = 0;
+	e->state = 0;
+	e->timer = 0;
+	e->foodCount = 0;
+
+	p->curRow = (SCREEN_HEIGHT / 2) - (RIGHT_HEIGHT / 2);
+	p->curCol = (SCREEN_WIDTH / 2) - (RIGHT_WIDTH / 2);
+	p->facing = 1;
 }
 
 /**
@@ -49,7 +58,7 @@ void init()
  *				2: left
  *				3: right
  */
-void move(int dir)
+/*void move(int dir)
 {
 	switch (dir) //Change row/col position
 	{
@@ -61,39 +70,32 @@ void move(int dir)
 		break;
 		case 2:
 			curCol--;
+			facing = 0;
 		break;
 		case 3:
 			curCol++;
+			facing = 1;
 		break;
 	}
 
-	boundsCheck(&curRow, SCREEN_HEIGHT - 1, 0, DOWN_HEIGHT);
-	boundsCheck(&curCol, SCREEN_WIDTH - 1, 0, DOWN_WIDTH);
+	boundsCheck(&curRow, SCREEN_HEIGHT - 1, 0, RIGHT_HEIGHT);
+	boundsCheck(&curCol, SCREEN_WIDTH - 1, 0, RIGHT_WIDTH);
 
-	drawRect(oldRow, oldCol, DOWN_HEIGHT, DOWN_WIDTH, BGCOLOR);
+	drawRect(oldRow, oldCol, RIGHT_HEIGHT, RIGHT_WIDTH, BGCOLOR);
 
-	switch (dir) //Move/redraw player
-	{
-		case 0:
-			drawImage3(curRow, curCol, UP_HEIGHT, UP_WIDTH, up);
-		break;
-		case 1:
-			drawImage3(curRow, curCol, DOWN_HEIGHT, DOWN_WIDTH, down);
-		break;
-		case 2:
-			drawImage3(curRow, curCol, LEFT_HEIGHT, LEFT_WIDTH, left);
-		break;
-		case 3:
-			drawImage3(curRow, curCol, RIGHT_HEIGHT, RIGHT_WIDTH, right);
-		break;
-	}
-}
+	if (facing == 0)
+		drawImage3(curRow, curCol, LEFT_HEIGHT, LEFT_WIDTH, left);
+	else if (facing == 1)
+		drawImage3(curRow, curCol, RIGHT_HEIGHT, RIGHT_WIDTH, right);
+}*/
 
 int main()
 {
 	REG_DISPCTL = MODE3 | BG2_ENABLE;
 
-	init();
+	Engine engine;
+	Player player;
+	init(&engine, &player);
 
 	while (1) //Game loop
 	{
@@ -101,21 +103,22 @@ int main()
 
 		if (KEY_DOWN_NOW(BUTTON_SELECT))
 		{
-			init();
+			init(&engine, &player);
 		}
 
-		switch (state) //Determine game state
+		switch (engine.state) //Determine game state
 		{
 			case 0: //Title screen
 				if (KEY_DOWN_NOW(BUTTON_START))
 				{
 					fillScreen(BGCOLOR);
 
-					curRow = (SCREEN_HEIGHT / 2) - (DOWN_HEIGHT / 2);
-					curCol = (SCREEN_WIDTH / 2) - (DOWN_WIDTH / 2);
+					//curRow = (SCREEN_HEIGHT / 2) - (RIGHT_HEIGHT / 2);
+					//curCol = (SCREEN_WIDTH / 2) - (RIGHT_WIDTH / 2);
 
-					drawImage3(curRow, curCol, DOWN_HEIGHT, DOWN_WIDTH, down);
-					state = 1;
+					drawImage3(player.curRow, player.curCol, RIGHT_HEIGHT, RIGHT_WIDTH, right);
+					//facing = 1;
+					engine.state = 1;
 
 					drawImage3(0, 0, BURGER_HEIGHT, BURGER_WIDTH, burger);
 					drawImage3(0, 25, PIZZA_HEIGHT, PIZZA_WIDTH, pizza);
@@ -125,38 +128,22 @@ int main()
 				}
 			break;
 			case 1: //Main gameplay
-				oldRow = curRow;
-				oldCol = curCol;
+				player.oldRow = player.curRow;
+				player.oldCol = player.curCol;
 
 				if (KEY_DOWN_NOW(BUTTON_UP))
-				{
-					//setDir(0);
-					move(0);
-				}
-				else if (KEY_DOWN_NOW(BUTTON_DOWN))
-				{
-					//setDir(1);
-					move(1);
-				}
-				else if (KEY_DOWN_NOW(BUTTON_LEFT))
-				{
-					//setDir(2);
-					move(2);
-				}
-				else if (KEY_DOWN_NOW(BUTTON_RIGHT))
-				{
-					//setDir(3);
-					move(3);
-				}
+					movePlayer(&player, 0);
+				if (KEY_DOWN_NOW(BUTTON_DOWN))
+					movePlayer(&player, 1);
+				if (KEY_DOWN_NOW(BUTTON_LEFT))
+					movePlayer(&player, 2);
+				if (KEY_DOWN_NOW(BUTTON_RIGHT))
+					movePlayer(&player, 3);
 
 				if (KEY_DOWN_NOW(BUTTON_A))
-				{
-					state = 2;
-				}
+					engine.state = 2;
 				else if (KEY_DOWN_NOW(BUTTON_B))
-				{
-					state = 3;
-				}
+					engine.state = 3;
 			break;
 			case 2: //Win screen
 				drawImage3(0, 0, WIN_HEIGHT, WIN_WIDTH, win);

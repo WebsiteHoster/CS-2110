@@ -1,3 +1,7 @@
+/**
+ * Jesse Chen
+ */
+
 typedef unsigned short u16;
 
 #define SCREEN_SIZE 38400

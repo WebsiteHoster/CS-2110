@@ -1,3 +1,7 @@
+/**
+ * Jesse Chen
+ */
+
 #include "myLib.h"
 
 u16 *videoBuffer = (unsigned short *)0x6000000;
@@ -39,13 +43,13 @@ int boundsCheck(int *var, int bound, int *delta, int size)
 		if (*var < 0)
 		{
 			*var = 0;
-			//*delta = -*delta;
+			*delta = -*delta;
 			return 1;
 		}
 		if (*var > bound - size+1)
 		{
 			*var = bound - size+1;
-			//*delta = -*delta;
+			*delta = -*delta;
 		}
 		return 0;
 
