@@ -39,7 +39,7 @@ void movePlayer(Player *p, int dir)
 		break;
 	}
 
-	boundsCheck(&p->curRow, SCREEN_HEIGHT - 11, 0, RIGHT_HEIGHT);
+	boundsCheck(&p->curRow, SCREEN_HEIGHT - 1, 0, RIGHT_HEIGHT);
 	boundsCheck(&p->curCol, SCREEN_WIDTH - 1, 0, RIGHT_WIDTH);
 
 	drawRect(p->oldRow, p->oldCol, RIGHT_HEIGHT, RIGHT_WIDTH, BGCOLOR);
@@ -124,6 +124,44 @@ void addFood(Engine *e, Food foods[], int i)
 
 	e->curFood++;
 	e->totalFood++;
+}
+
+void addBroccoli(Engine *e, Player *p, Broccoli broccolis[], int i)
+{
+	i--;
+	int pX = p->curCol -  RIGHT_WIDTH / 2; //X-coordinate of center of player
+	int pY = p->curRow - RIGHT_HEIGHT / 2; //Y-coordinate of center of player
+
+	if (pX > SCREEN_WIDTH / 2 && pY < SCREEN_HEIGHT / 2) //Player is in Q1, spawn in Q3
+	{
+		broccolis[i].curRow = SCREEN_HEIGHT - BROCCOLI_HEIGHT;
+		broccolis[i].curCol = 0;
+		broccolis[i].deltaRow = -1;
+		broccolis[i].deltaCol = 1;
+	}
+	else if (pX < SCREEN_WIDTH / 2 && pY < SCREEN_HEIGHT / 2) //Player is in Q2, spawn in Q4
+	{
+		broccolis[i].curRow = SCREEN_HEIGHT - BROCCOLI_HEIGHT;
+		broccolis[i].curCol = SCREEN_WIDTH - BROCCOLI_WIDTH;
+		broccolis[i].deltaRow = -1;
+		broccolis[i].deltaCol = -1;
+	}
+	else if (pX < SCREEN_WIDTH / 2 && pY > SCREEN_HEIGHT / 2) //Player is in Q3, spawn in Q1
+	{
+		broccolis[i].curRow = 0;
+		broccolis[i].curCol = SCREEN_WIDTH - BROCCOLI_WIDTH;
+		broccolis[i].deltaRow = 1;
+		broccolis[i].deltaCol = -1;
+	}
+	else if (pX > SCREEN_WIDTH / 2 && pY > SCREEN_HEIGHT / 2) //Player is in Q4, spawn in Q2
+	{
+		broccolis[i].curRow = 0;
+		broccolis[i].curCol = 0;
+		broccolis[i].deltaRow = 1;
+		broccolis[i].deltaCol = 1;
+	}
+
+	drawImage3(broccolis[i].curRow, broccolis[i].curCol, BROCCOLI_HEIGHT,BROCCOLI_WIDTH, broccoli);
 }
 
 void checkCollideFood(Engine *e, Player *p, Food *f)

@@ -17,7 +17,6 @@ OFILES = main.o myLib.o structs.o text.o font.o title.o win.o lose.o player.o fo
 # This is necessary to determine when to recompile for files.
 # This should be a space (SPACE!) separated list of .h files
 HFILES = myLib.h structs.h text.h title.h win.h lose.h player.h food.h broccoli.h
-#up.h down.h left.h right.h
 
 ################################################################################
 # These are various settings used to make the GBA toolchain work

@@ -4,8 +4,8 @@
 
 typedef unsigned short u16;
 
-#define SCREEN_SIZE 38400
-#define SCREEN_HEIGHT 160
+#define SCREEN_SIZE 38400 //Entire screen size
+#define SCREEN_HEIGHT 150 //Leave 10 pixels for score
 #define SCREEN_WIDTH 240
 
 #define REG_DISPCTL *(unsigned short *)0x4000000

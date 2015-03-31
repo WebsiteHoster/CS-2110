@@ -17,9 +17,12 @@
 #include "broccoli.h"
 
 #define MAX_FOOD 50
+#define MAX_BROCCOLI 5
 
 Food foods[MAX_FOOD];
+Broccoli broccolis[MAX_BROCCOLI];
 int curFoodIndex;
+int broccoliCount;
 
 /**
  * Initializes/reinitializes the game to title screen
@@ -48,9 +51,10 @@ void startLevel(Engine *e, Player *p)
 	e->curFood = 0;
 
 	for (curFoodIndex = 0; curFoodIndex < 5; curFoodIndex++)
-	{
 		addFood(e, foods, curFoodIndex);
-	}
+
+	if (e->level <= 5)
+		addBroccoli(e, p, broccolis, e->level);
 }
 
 int main()
@@ -80,6 +84,7 @@ int main()
 				{
 					srand(engine.timer); //Seed RNG
 					startLevel(&engine, &player);
+					addBroccoli(&engine, &player, broccolis, broccoliCount);
 				}
 			break;
 			case 1: //Main gameplay
@@ -100,6 +105,14 @@ int main()
 					movePlayer(&player, 3);
 				else
 					movePlayer(&player, -1);
+
+				//Broccoli movement
+				for (int i = 0; i < engine.level; i++)
+				{
+					broccolis[i].oldRow = broccolis[i].curRow;
+					broccolis[i].oldCol = broccolis[i].curCol;
+					moveBroccoli(&broccolis[i]);
+				}
 
 				//Periodically add more food if there are less than 5 on
 				//screen and less than 5 * level have appeared in total
