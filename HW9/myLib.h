@@ -86,6 +86,8 @@ extern unsigned short *videoBuffer;
 
 // Prototype
 void drawImage3(int row, int col, int height, int width, const u16* image);
+//DELETE
+void drawImagePart(int row, int col, int height, int width, int iHeight, int iWidth, const u16* image);
 void setPixel(int row, int col, u16 color);
 void drawRect(int row, int col, int height, int width, u16 color);
 void fillScreen(u16 color);

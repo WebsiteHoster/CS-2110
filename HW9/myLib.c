@@ -16,6 +16,17 @@ void drawImage3(int row, int col, int height, int width, const u16* image)
 	}
 }
 
+//DELETE
+void drawImagePart(int row, int col, int height, int width, int iHeight, int iWidth, const u16* image)
+{
+	for (int i = 0; i < height; i++)
+	{
+		 DMA[3].src = image + OFFSET(i, 0, iWidth);
+		 DMA[3].dst = videoBuffer + OFFSET(row + i, col, 240);
+		 DMA[3].cnt = width | DMA_ON;
+	}
+}
+
 void setPixel(int row, int col, u16 color)
 {
 	videoBuffer[OFFSET(row, col, 240)] = color;

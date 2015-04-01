@@ -19,24 +19,24 @@
 #define MAX_FOOD 50
 #define MAX_BROCCOLI 4
 
-Food foods[MAX_FOOD];
+/*Food foods[MAX_FOOD];
 Broccoli broccolis[MAX_BROCCOLI];
 int curFoodIndex;
-int broccoliCount;
+int broccoliCount;*/
 
 /**
  * Initializes/reinitializes the game to title screen
  */
-void init(Engine *e)
+/*void init(Engine *e)
 {
 	drawImage3(0, 0, TITLE_HEIGHT, TITLE_WIDTH, title);
 	e->state = 0;
 	e->level = 0;
 	e->score = 0;
 	e->timer = 0;
-}
+}*/
 
-void startLevel(Engine *e, Player *p)
+/*void startLevel(Engine *e, Player *p)
 {
 	fillScreen(BGCOLOR);
 
@@ -60,28 +60,58 @@ void startLevel(Engine *e, Player *p)
 	drawImage3(p->curRow, p->curCol, RIGHT_HEIGHT, RIGHT_WIDTH, right);
 
 	//e->timer = 0;
-	/*while (e->timer < 300) //Wait 300 VBlanks before starting
+	while (e->timer < 300) //Wait 300 VBlanks before starting
 	{
 		WaitForVblank();
 		e->timer++;
 	}
 	e->timer = 0;*/
-}
+//}
 
 int main()
 {
 	REG_DISPCTL = MODE3 | BG2_ENABLE;
 
-	Engine engine;
-	Player player;
-	char scoreBuffer[11];
-	init(&engine);
+	//Engine engine;
+	//Player player;
+	//char scoreBuffer[11];
+	//init(&engine);
 
 	while (1) //Game loop
 	{
 		WaitForVblank();
 
-		if (KEY_DOWN_NOW(BUTTON_SELECT))
+		//DELETE
+		drawImagePart(100, 100, 45, 50, LEFT_HEIGHT, LEFT_WIDTH, left);
+		/* DMA Flags
+		DMA_SOURCE_INCREMENT and DMA_SOURCE_INCREMENT are default. They draw
+		images normally.
+		DMA_SOURCE_FIXED fixes the source so that all the drawn pixels are
+		the same.
+		DMA_DESTINATION_FIXED fixes the destination so that the same 
+		destination pixels are repeatedly rewritten.
+		DMA_SOURCE_DECREMENT and DMA_DESTINATION_DECREMENT horizontally 
+		flips the image.
+		*/
+		/* DMA_32
+		By default, DMA on the Gameboy does so in 16-bit increments. Using 
+		the DMA_32 flag makes it copy in 32-bit increments, or twice as much.
+
+		So basically, it's a matter of being able to optimize the DMA as it 
+		copies the data? 
+		Pretty much. It's also useful in some very specific
+		situations like in the 3rd part of Monday's lab where you're copying 
+		two pixel values at once. It is twice as fast as DMA_16 but keep in 
+		mind it can (of course) only copy an even number of shorts in a copy, 
+		so it's not always applicable to optimizing other DMAs.
+
+		But then the 'count' or number of transfers, is actually the number 
+		of 32-bit transfers? instead of 16 bit transfers? So the DMA needs to 
+		do half the number of processes to accomplish the task?
+		Yes.
+		*/
+
+		/*if (KEY_DOWN_NOW(BUTTON_SELECT))
 		{
 			init(&engine);
 		}
@@ -184,6 +214,6 @@ int main()
 			case 3: //Lose screen
 				drawImage3(0, 0, LOSE_HEIGHT, LOSE_WIDTH, lose);
 			break;
-		}
+		}*/
 	} // while gameloop
 }
