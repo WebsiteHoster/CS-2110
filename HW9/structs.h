@@ -6,7 +6,6 @@
 #define STRUCTS_H
 
 typedef enum { BURGER, PIZZA, CHICKEN, CAKE, DONUT } Food_t;
-//typedef enum { BURGER, PIZZA, CHICKEN, CAKE, DONUT, PLAYER, BROCCOLI } Collideable_t;
 
 typedef struct
 {
@@ -45,12 +44,23 @@ typedef struct
  	int deltaCol;
 } Broccoli;
 
+typedef struct
+{
+	int row;
+	int col;
+	int height;
+	int width;
+} Collideable;
+
+void addFood(Engine *e, Player *p, Food foods[], int i, Broccoli broccolis[]);
+void addBroccoli(Engine *e, Player *p, Broccoli broccolis[]);
 void movePlayer(Player *p, int dir);
 void moveBroccoli(Broccoli *b);
-//void checkCollision(Collideable_t c1, Collideable_t c2);
-void addFood(Engine *e, Food foods[], int i);
-void addBroccoli(Engine *e, Player *p, Broccoli broccolis[], int i);
-void checkCollideFood(Engine *e, Player *p, Food *f);
+int checkCollision(Collideable c1, Collideable c2);
+int checkCollidePF(Engine *e, Player *p, Food *f);
+int checkCollidePB(Engine *e, Player *p, Broccoli *b);
+int checkCollideFB(Engine *e, Food *f, Broccoli *b);
+int checkCollideBB(Engine *e, Broccoli broccolis[]);
 void eatFood(Engine *e, Food *f, int height, int width);
 
 #endif

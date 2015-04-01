@@ -17,7 +17,7 @@
 #include "broccoli.h"
 
 #define MAX_FOOD 50
-#define MAX_BROCCOLI 5
+#define MAX_BROCCOLI 4
 
 Food foods[MAX_FOOD];
 Broccoli broccolis[MAX_BROCCOLI];
@@ -27,34 +27,45 @@ int broccoliCount;
 /**
  * Initializes/reinitializes the game to title screen
  */
-void init(Engine *e, Player *p)
+void init(Engine *e)
 {
 	drawImage3(0, 0, TITLE_HEIGHT, TITLE_WIDTH, title);
 	e->state = 0;
 	e->level = 0;
 	e->score = 0;
 	e->timer = 0;
-
-	p->curRow = (SCREEN_HEIGHT / 2) - (RIGHT_HEIGHT / 2);
-	p->curCol = (SCREEN_WIDTH / 2) - (RIGHT_WIDTH / 2);
-	p->facing = 1;
 }
 
 void startLevel(Engine *e, Player *p)
 {
 	fillScreen(BGCOLOR);
-	drawImage3(p->curRow, p->curCol, RIGHT_HEIGHT, RIGHT_WIDTH, right);
 
 	e->state = 1;
 	e->level++;
 	e->totalFood = 0;
 	e->curFood = 0;
 
-	for (curFoodIndex = 0; curFoodIndex < 5; curFoodIndex++)
-		addFood(e, foods, curFoodIndex);
+	p->curRow = (SCREEN_HEIGHT / 2) - (RIGHT_HEIGHT / 2);
+	p->curCol = (SCREEN_WIDTH / 2) - (RIGHT_WIDTH / 2);
+	p->facing = 1;
 
-	if (e->level <= 5)
-		addBroccoli(e, p, broccolis, e->level);
+	for (curFoodIndex = 0; curFoodIndex < 5; curFoodIndex++)
+		addFood(e, p, foods, curFoodIndex, broccolis);
+
+	if (e->level <= MAX_BROCCOLI)
+		addBroccoli(e, p, broccolis);
+	else
+		addBroccoli(e, p, broccolis);
+
+	drawImage3(p->curRow, p->curCol, RIGHT_HEIGHT, RIGHT_WIDTH, right);
+
+	//e->timer = 0;
+	/*while (e->timer < 300) //Wait 300 VBlanks before starting
+	{
+		WaitForVblank();
+		e->timer++;
+	}
+	e->timer = 0;*/
 }
 
 int main()
@@ -64,7 +75,7 @@ int main()
 	Engine engine;
 	Player player;
 	char scoreBuffer[11];
-	init(&engine, &player);
+	init(&engine);
 
 	while (1) //Game loop
 	{
@@ -72,7 +83,7 @@ int main()
 
 		if (KEY_DOWN_NOW(BUTTON_SELECT))
 		{
-			init(&engine, &player);
+			init(&engine);
 		}
 
 		switch (engine.state) //Determine game state
@@ -84,7 +95,6 @@ int main()
 				{
 					srand(engine.timer); //Seed RNG
 					startLevel(&engine, &player);
-					addBroccoli(&engine, &player, broccolis, broccoliCount);
 				}
 			break;
 			case 1: //Main gameplay
@@ -106,38 +116,50 @@ int main()
 				else
 					movePlayer(&player, -1);
 
-				//Broccoli movement
-				for (int i = 0; i < engine.level; i++)
-				{
-					broccolis[i].oldRow = broccolis[i].curRow;
-					broccolis[i].oldCol = broccolis[i].curCol;
-					moveBroccoli(&broccolis[i]);
-				}
-
-				//Periodically add more food if there are less than 5 on
-				//screen and less than 5 * level have appeared in total
-				if (engine.timer > 50 && engine.curFood < 5 && engine.totalFood < 5 * engine.level)
-				{
-					addFood(&engine, foods, curFoodIndex);
-					curFoodIndex++;
-					engine.timer = 0;
-				}
-
-				//Check for collisions and if food is still on the screen
+				//Check for Food collisions and if Food is still on the screen
 				int isEmpty = 1;
 				for (int i = 0; i < 5 * engine.level; i++)
 				{
 					if (foods[i].isEaten == 0)
 					{
-						checkCollideFood(&engine, &player, &foods[i]);
+						checkCollidePF(&engine, &player, &foods[i]);
+
+						//for (int j = 0; j < engine.level; j++)
+						//	checkCollideFB(&engine, &foods[i], &broccolis[j]);
+
 						isEmpty = 0;
 					}
 				}
 
 				//If no food is left, go to state 2
 				if (isEmpty == 1)
-				{
 					engine.state = 2;
+
+				//Broccoli movement and collisions
+				for (int i = 0; i < engine.level; i++)
+				{
+					broccolis[i].oldRow = broccolis[i].curRow;
+					broccolis[i].oldCol = broccolis[i].curCol;
+					moveBroccoli(&broccolis[i]);
+
+					if (checkCollidePB(&engine, &player, &broccolis[i]))
+						engine.state = 3;
+
+					checkCollideFB(&engine, foods, &broccolis[i]);
+				}
+
+				//Check for Broccoli-Broccoli collisions
+				if (engine.level > 1)
+					checkCollideBB(&engine, broccolis);
+					
+
+				//Periodically add more food if there are less than 5 on
+				//screen and less than 5 * level have appeared in total
+				if (engine.timer > 50 && engine.curFood < 5 && engine.totalFood < 5 * engine.level)
+				{
+					addFood(&engine, &player, foods, curFoodIndex, broccolis);
+					curFoodIndex++;
+					engine.timer = 0;
 				}
 
 				//Print score on screen
